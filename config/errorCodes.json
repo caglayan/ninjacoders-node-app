@@ -57,5 +57,10 @@
         "Code": "SECURITY103",
         "Status": "400",
         "Message": "Google token expired or malformed."
+    },
+    "COURSE101": {
+        "Code": "COURSE101",
+        "Status": "400",
+        "Message": "Course not found."
     }
 }

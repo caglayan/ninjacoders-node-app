@@ -192,7 +192,7 @@ router.post("/sendtestemail", function (req, res, next) {
 router.post("/resetpassword", function (req, res, next) {
   if (req.body.email) {
     console.log(chalk.yellow("reset password mail | email: " + req.body.email));
-    User.findUser(req.body.email)
+    User.findUserByEmail(req.body.email)
       .then((user) => {
         console.log(chalk.green("User found for reset password."));
         User.signUser(user)

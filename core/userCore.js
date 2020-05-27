@@ -365,11 +365,32 @@ UserSchema.statics.removeUser = function (userId) {
   });
 };
 
+// FIND USER ONLY FORGET PASS//
 // find User for forget pass
-UserSchema.statics.findUser = function (email) {
+UserSchema.statics.findUserByEmail = function (email) {
   return new Promise((resolve, reject) => {
     User.findOne({
       email: email,
+    }).exec(function (err, user) {
+      if (err) return reject(err);
+      if (!user) {
+        err = {
+          code: 404,
+          errmsg: "not found",
+        };
+        return reject(err);
+      }
+      return resolve(user);
+    });
+  });
+};
+
+// FIND USER WITH ID//
+// find User for Private Course
+UserSchema.statics.findUserById = function (userId) {
+  return new Promise((resolve, reject) => {
+    User.findOne({
+      _id: userId,
     }).exec(function (err, user) {
       if (err) return reject(err);
       if (!user) {

@@ -5,10 +5,10 @@ const Comment = new Schema(
     sender: {
       type: Schema.Types.ObjectId,
       ref: "User",
-      required: true
+      required: true,
     },
     title: String,
-    detail: String
+    detail: String,
   },
   { timestamps: true }
 );
@@ -18,7 +18,7 @@ const patronSchema = new Schema({
   familyName: String,
   imageUrl: String,
   title: String,
-  story: String
+  story: String,
 });
 
 const ProductSchema = new Schema(
@@ -26,20 +26,28 @@ const ProductSchema = new Schema(
     title: {
       type: String,
       required: true,
-      unique: true
+      unique: true,
     },
-    subtitle: String,
-    description: {
-      header: String,
-      content: String
-    },
-    patron: patronSchema,
     abilities: {
       type: Array,
-      default: ["Python", "Veri Görselleştirme"]
+      default: ["NinjaCoders", "Kodlama", "Robotik"],
+    },
+    instructor: Object,
+    description: {
+      header: String,
+      content: String,
     },
     purchaseNumber: Number,
-    commentNumber: Number
+    commentPoint: Number,
+    isBelongNinja: Boolean,
+    numberOfSections: Number,
+    studentNumber: Number,
+    levelPoint: Number,
+    duration: Number,
+    comments: [Comment],
+    chapters: [],
+    projects: [],
+    patron: patronSchema,
   },
   { timestamps: true }
 );

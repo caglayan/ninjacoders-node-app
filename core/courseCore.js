@@ -1,8 +1,8 @@
 const mongoose = require("mongoose");
-const CourseSchema = require("../models/productModel.js");
+const CourseSchema = require("../models/courseModel.js");
 
 //Create Course
-CourseSchema.statics.createCourse = function(CourseData) {
+CourseSchema.statics.createCourse = function (CourseData) {
   return new Promise((resolve, reject) => {
     Course.create(CourseData)
       .then((course) => {
@@ -15,14 +15,38 @@ CourseSchema.statics.createCourse = function(CourseData) {
 };
 
 //Find Course
-CourseSchema.statics.findCourse = function(_id) {
+CourseSchema.statics.findPublicCourse = function (_id) {
   return new Promise((resolve, reject) => {
-    Course.findOne({ _id }).exec(function(err, course) {
+    Course.findOne({ _id }).exec(function (err, course) {
       if (err) return reject(err);
       if (!course) {
         err = {
           code: 404,
-          errmsg: "not found"
+          errmsg: "not found",
+        };
+        return reject(err);
+      }
+      course.chapters.map((chapters) => {
+        chapters.sections.map((section) => {
+          if (!section.isPublic) {
+            section.video = "";
+          }
+        });
+      });
+      return resolve(course);
+    });
+  });
+};
+
+//Find Private Course
+CourseSchema.statics.findPrivateCourse = function (_id) {
+  return new Promise((resolve, reject) => {
+    Course.findOne({ _id }).exec(function (err, course) {
+      if (err) return reject(err);
+      if (!course) {
+        err = {
+          code: 404,
+          errmsg: "not found",
         };
         return reject(err);
       }
@@ -32,21 +56,21 @@ CourseSchema.statics.findCourse = function(_id) {
 };
 
 //Add Comment
-CourseSchema.statics.addComment = function(courseId, comment, userId) {
+CourseSchema.statics.addComment = function (courseId, comment, userId) {
   return new Promise((resolve, reject) => {
-    Course.findOne({ _id: courseId }).exec(function(err, course) {
+    Course.findOne({ _id: courseId }).exec(function (err, course) {
       if (err) return reject(err);
       if (!course) {
         err = {
           code: 404,
-          errmsg: "not found"
+          errmsg: "not found",
         };
         return reject(err);
       }
       if (course.comments.filter((comment) => comment.sender == userId)) {
         err = {
           code: 404,
-          errmsg: "comment already found"
+          errmsg: "comment already found",
         };
         return reject(err);
       } else {
@@ -66,14 +90,14 @@ CourseSchema.statics.addComment = function(courseId, comment, userId) {
 };
 
 //Remove Comment
-CourseSchema.statics.removeComment = function(courseId, commentId) {
+CourseSchema.statics.removeComment = function (courseId, commentId) {
   return new Promise((resolve, reject) => {
-    Course.findOne({ _id: courseId }).exec(function(err, course) {
+    Course.findOne({ _id: courseId }).exec(function (err, course) {
       if (err) return reject(err);
       if (!course) {
         err = {
           code: 404,
-          errmsg: "not found"
+          errmsg: "not found",
         };
         return reject(err);
       }
@@ -93,14 +117,14 @@ CourseSchema.statics.removeComment = function(courseId, commentId) {
 };
 
 //Update Comment
-CourseSchema.statics.updateComment = function(courseId, comment) {
+CourseSchema.statics.updateComment = function (courseId, comment) {
   return new Promise((resolve, reject) => {
-    Course.findOne({ _id: courseId }).exec(function(err, course) {
+    Course.findOne({ _id: courseId }).exec(function (err, course) {
       if (err) return reject(err);
       if (!course) {
         err = {
           code: 404,
-          errmsg: "not found"
+          errmsg: "not found",
         };
         return reject(err);
       }
