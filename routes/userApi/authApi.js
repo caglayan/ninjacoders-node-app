@@ -26,6 +26,32 @@ router.post("/update", function (req, res, next) {
     });
 });
 
+/// UPDATE USER PREMIUM///
+/* POST update user */
+router.post("/updatepremium", function (req, res, next) {
+  const premiumData = {
+    _id: req.body._id,
+    premium: req.body.premium,
+  };
+  if (req.body.premium) {
+    console.log(
+      chalk.yellow("update user | id: " + req.user._id + " body: " + req.body)
+    );
+    User.updateUser(premiumData, req.user._id)
+      .then((user) => {
+        console.log(chalk.green(successCodes.USER101.Success));
+        return res.status(202).json({
+          ...successCodes.USER101,
+          user: user,
+        });
+      })
+      .catch((error) => {
+        console.log(chalk.red(JSON.stringify(errorCodes.USER100)));
+        return res.status(400).json(errorCodes.USER100);
+      });
+  }
+});
+
 /// UPDATE USER PASSWORD ///
 /* POST update user password */
 router.post("/updatepassword", function (req, res, next) {

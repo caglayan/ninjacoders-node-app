@@ -7,7 +7,7 @@ const AvatarImageSchema = new Schema(
     name: String,
     size: Number,
     md5: String,
-    encoding: String
+    encoding: String,
   },
   { timestamps: true }
 );
@@ -21,23 +21,24 @@ const UserSchema = new Schema(
       match: [/\S+@\S+\.\S+/, "is invalid"],
       default: "bos@ninjacoders.co",
       index: true,
-      immutable: true
+      immutable: true,
     },
     passwordHash: String,
     password: {
       type: String,
-      required: [false, "can't be blank"]
+      required: [false, "can't be blank"],
     },
     googleId: {
       type: String,
-      index: true
+      index: true,
     },
     givenName: String,
     familyName: String,
     avatarImageUrl: String,
+    premium: Boolean,
     token: {
       type: String,
-      required: false
+      required: false,
     },
     shoppingCart: [Object],
     notifications: "", //[notificationSchema],
@@ -52,10 +53,10 @@ const UserSchema = new Schema(
     type: String,
     isAdmin: {
       type: Boolean,
-      default: false
+      default: false,
     },
     courses: "", //[takenCourse],
-    doneLectures: "" //[doneWorks],
+    doneLectures: "", //[doneWorks],
   },
   { timestamps: true }
 );

@@ -24,6 +24,7 @@ router.use(function (req, res, next) {
     console.log(chalk.red(JSON.stringify(error)));
     return res.status(400).json(error);
   }
+  console.log(token);
   User.findByToken(token)
     .then((user) => {
       console.log(chalk.green("User authanticated with his/her token"));
