@@ -4,6 +4,7 @@ const chalk = require("chalk");
 
 const questionNonAuth = require("./questionNonAuth");
 const questionAuth = require("./questionAuth");
+const answerAuth = require("./answerAuth");
 const User = require("../../core/userCore");
 const errorCodes = require("../../config/errorCodes.json");
 
@@ -39,5 +40,6 @@ router.use(function (req, res, next) {
 });
 
 router.use("/auth", questionAuth);
+router.use("/answer/auth", answerAuth);
 
 module.exports = router;

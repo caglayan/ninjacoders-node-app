@@ -19,6 +19,7 @@ const AnswerSchema = new Schema(
     givenName: String,
     familyName: String,
     senderTitle: String,
+    title: String,
     body: String,
     like: Number,
   },

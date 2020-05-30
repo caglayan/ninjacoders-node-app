@@ -32,6 +32,23 @@ CommentSchema.statics.findComment = function (user_id) {
   });
 };
 
+//Find Comment with _id
+CommentSchema.statics.findCommentOne = function (_id) {
+  return new Promise((resolve, reject) => {
+    Comment.findOne({ _id }).exec(function (err, comment) {
+      if (err) return reject(err);
+      if (!comment) {
+        err = {
+          code: 404,
+          errmsg: "not found",
+        };
+        return reject(err);
+      }
+      return resolve(comment);
+    });
+  });
+};
+
 //Pull Comments
 CommentSchema.statics.pullComments = function (limit, skip, courseId) {
   return new Promise((resolve, reject) => {
@@ -52,6 +69,8 @@ CommentSchema.statics.pullComments = function (limit, skip, courseId) {
 CommentSchema.statics.updateComment = function (commentData, commentId) {
   delete commentData.course;
   delete commentData.sender;
+  delete commentData.givenName;
+  delete commentData.familyName;
   return new Promise((resolve, reject) => {
     Comment.findByIdAndUpdate(commentId, commentData, {
       new: true,

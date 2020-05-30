@@ -28,8 +28,8 @@ router.post("/add", function (req, res, next) {
         });
       })
       .catch((error) => {
-        console.log(chalk.red(JSON.stringify(errorCodes.COMMENT102)));
-        return res.status(400).json(errorCodes.COMMENT102);
+        console.log(chalk.red(JSON.stringify(errorCodes.QUESTION102)));
+        return res.status(400).json(errorCodes.QUESTION102);
       });
   } else {
     console.log(chalk.red(JSON.stringify(errorCodes.SERVER101)));
@@ -40,74 +40,91 @@ router.post("/add", function (req, res, next) {
 /* POST find question */
 router.post("/find", function (req, res, next) {
   console.log(chalk.yellow("find question | user: " + req.user.givenName));
-  Question.findQuestion(req.user._id)
+  Question.findQuestions(req.user._id)
     .then((question) => {
       console.log(chalk.green("Question found."));
       return res.status(202).json({
         status: 202,
-        msg: "Commment found.",
+        msg: "Question found.",
         question: question,
       });
     })
     .catch((error) => {
-      console.log(chalk.red(JSON.stringify(errorCodes.COMMENT102)));
-      return res.status(400).json(errorCodes.COMMENT102);
+      console.log(chalk.red(JSON.stringify(errorCodes.QUESTION101)));
+      return res.status(400).json(errorCodes.QUESTION101);
     });
 });
 
-router.post("/removeQuestion", function (req, res, next) {
-  if (req.body.questionId && req.body._id) {
-    console.log(chalk.yellow("remove question " + req.body._id));
-    Course.removeQuestion(req.body._id, req.body.questionId)
-      .then((course) => {
-        console.log(chalk.green("Course updated."));
-        return res.status(202).json({
-          status: 202,
-          msg: "Commment removed.",
-          course: course,
-        });
+/* POST update question */
+
+router.post("/update", function (req, res, next) {
+  if (req.body.question && req.body.body && req.body.title) {
+    console.log(chalk.yellow("update question " + req.body.question));
+    Question.findQuestionOne(req.body.question)
+      .then((question) => {
+        if (question.sender.toString() == req.user._id.toString()) {
+          const questionData = { body: req.body.body, title: req.body.title };
+          Question.updateQuestion(questionData, req.body.question)
+            .then((course) => {
+              console.log(chalk.green("Question updated."));
+              return res.status(202).json({
+                status: 202,
+                msg: "Question updated.",
+                course: course,
+              });
+            })
+            .catch((error) => {
+              console.log(chalk.red(JSON.stringify(errorCodes.QUESTION103)));
+              return res.status(400).json(errorCodes.QUESTION103);
+            });
+        } else {
+          console.log(chalk.red(JSON.stringify(errorCodes.QUESTION104)));
+          return res.status(400).json(errorCodes.QUESTION104);
+        }
       })
       .catch((error) => {
-        console.log(chalk.green(error.errmsg));
-        return res.status(400).json({
-          status: 400,
-          code: error.code,
-          errmsg: error.errmsg,
-        });
+        console.log(chalk.red(JSON.stringify(errorCodes.QUESTION102)));
+        return res.status(400).json(errorCodes.QUESTION102);
       });
   } else {
-    return res.status(411).json({
-      status: 411,
-      desc: "length required",
-    });
+    console.log(chalk.red(JSON.stringify(errorCodes.SERVER101)));
+    return res.status(400).json(errorCodes.SERVER101);
   }
 });
 
-router.post("/updateQuestion", function (req, res, next) {
-  if (req.body.question._id && req.body._id) {
-    console.log(chalk.yellow("adding question " + req.body._id));
-    Course.updateQuestion(req.body._id, req.body.question)
-      .then((course) => {
-        console.log(chalk.green("Course updated."));
-        return res.status(202).json({
-          status: 202,
-          msg: "Course updated.",
-          course: course,
-        });
+/* POST remove question */
+
+router.post("/remove", function (req, res, next) {
+  if (req.body.question) {
+    console.log(chalk.yellow("update question " + req.body.question));
+    Question.findQuestionOne(req.body.question)
+      .then((question) => {
+        if (question.sender.toString() == req.user._id.toString()) {
+          Question.removeQuestion(req.body.question)
+            .then((response) => {
+              console.log(chalk.green("Question removed."));
+              return res.status(202).json({
+                status: 202,
+                msg: "Question removed.",
+                response: response,
+              });
+            })
+            .catch((error) => {
+              console.log(chalk.red(JSON.stringify(errorCodes.QUESTION103)));
+              return res.status(400).json(errorCodes.QUESTION103);
+            });
+        } else {
+          console.log(chalk.red(JSON.stringify(errorCodes.QUESTION104)));
+          return res.status(400).json(errorCodes.QUESTION104);
+        }
       })
       .catch((error) => {
-        console.log(chalk.green(error.errmsg));
-        return res.status(400).json({
-          status: 400,
-          code: error.code,
-          errmsg: error.errmsg,
-        });
+        console.log(chalk.red(JSON.stringify(errorCodes.QUESTION102)));
+        return res.status(400).json(errorCodes.QUESTION102);
       });
   } else {
-    return res.status(411).json({
-      status: 411,
-      desc: "length required",
-    });
+    console.log(chalk.red(JSON.stringify(errorCodes.SERVER101)));
+    return res.status(400).json(errorCodes.SERVER101);
   }
 });
 

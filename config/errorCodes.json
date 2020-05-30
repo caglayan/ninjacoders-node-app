@@ -86,5 +86,35 @@
         "Status": "400",
         "Error": "Comment exists",
         "Message": "You have already created a comment"
+    },
+    "QUESTION101": {
+        "Code": "QUESTION101",
+        "Status": "400",
+        "Error": "Question: Question is not Found",
+        "Message": "An internal error is occured."
+    },
+    "QUESTION102": {
+        "Code": "QUESTION102",
+        "Status": "500",
+        "Error": "Answer or Question Create: Not created",
+        "Message": "An internal error is occured."
+    },
+    "QUESTION103": {
+        "Code": "QUESTION103",
+        "Status": "500",
+        "Error": "Question Update: not updated",
+        "Message": "An internal error is occured."
+    },
+    "QUESTION104": {
+        "Code": "QUESTION103",
+        "Status": "500",
+        "Error": "Question Update: no permission",
+        "Message": "An internal error is occured."
+    },
+    "ANSWER101": {
+        "Code": "ANSWER101",
+        "Status": "500",
+        "Error": "Answer not found",
+        "Message": "An internal error is occured."
     }
 }

@@ -16,9 +16,26 @@ QuestionSchema.statics.createQuestion = function (QuestionData) {
 };
 
 //Find Question with userId
-QuestionSchema.statics.findQuestion = function (user_id) {
+QuestionSchema.statics.findQuestions = function (user_id) {
   return new Promise((resolve, reject) => {
-    Question.findOne({ sender: user_id }).exec(function (err, question) {
+    Question.find({ sender: user_id }).exec(function (err, question) {
+      if (err) return reject(err);
+      if (!question) {
+        err = {
+          code: 404,
+          errmsg: "not found",
+        };
+        return reject(err);
+      }
+      return resolve(question);
+    });
+  });
+};
+
+//Find Question with userId
+QuestionSchema.statics.findQuestionOne = function (_id) {
+  return new Promise((resolve, reject) => {
+    Question.findOne({ _id }).exec(function (err, question) {
       if (err) return reject(err);
       if (!question) {
         err = {
@@ -52,6 +69,8 @@ QuestionSchema.statics.pullQuestions = function (limit, skip, courseId) {
 QuestionSchema.statics.updateQuestion = function (questionData, questionId) {
   delete questionData.course;
   delete questionData.sender;
+  delete questionData.givenName;
+  delete questionData.familyName;
   return new Promise((resolve, reject) => {
     Question.findByIdAndUpdate(questionId, questionData, {
       new: true,
@@ -86,6 +105,91 @@ QuestionSchema.statics.removeQuestion = function (_id) {
         resolve(opt);
       }
     );
+  });
+};
+
+/* -------------------ANSWER --------------------*/
+
+//Create Question
+QuestionSchema.statics.answerQuestion = function (question, answer) {
+  return new Promise((resolve, reject) => {
+    question.answers.push(answer);
+    question
+      .save()
+      .then((question) => {
+        resolve(question);
+      })
+      .catch((err) => {
+        reject(err);
+      });
+  });
+};
+
+QuestionSchema.statics.removeAnswer = function (question, answer_id, user_id) {
+  return new Promise((resolve, reject) => {
+    var answerChanged = false;
+    question.answers = question.answers.filter((answer) => {
+      if (answer.sender == user_id.toString()) {
+        if (answer._id == answer_id) {
+          answerChanged = true;
+          return false;
+        } else {
+          return true;
+        }
+      } else {
+        return true;
+      }
+    });
+    if (answerChanged) {
+      question
+        .save()
+        .then((question) => {
+          resolve({ question, answerChanged });
+        })
+        .catch((err) => {
+          reject(err);
+        });
+    } else {
+      resolve({ question, answerChanged });
+    }
+  });
+};
+
+QuestionSchema.statics.updateAnswer = function (
+  question,
+  answer_id,
+  user_id,
+  title,
+  body
+) {
+  return new Promise((resolve, reject) => {
+    var answerChanged = false;
+    question.answers = question.answers.map((answer) => {
+      if (answer.sender == user_id.toString()) {
+        if (answer._id == answer_id) {
+          answer.body = body;
+          answer.title = title;
+          answerChanged = true;
+          return answer;
+        } else {
+          return answer;
+        }
+      } else {
+        return answer;
+      }
+    });
+    if (answerChanged) {
+      question
+        .save()
+        .then((question) => {
+          resolve({ question, answerChanged });
+        })
+        .catch((err) => {
+          reject(err);
+        });
+    } else {
+      resolve({ question, answerChanged });
+    }
   });
 };
 

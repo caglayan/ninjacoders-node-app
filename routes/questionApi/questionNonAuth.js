@@ -21,8 +21,8 @@ router.post("/pull", function (req, res, next) {
         });
       })
       .catch((error) => {
-        console.log(chalk.red(JSON.stringify(errorCodes.COMMENT103)));
-        return res.status(400).json(errorCodes.COMMENT103);
+        console.log(chalk.red(JSON.stringify(errorCodes.QUESTION101)));
+        return res.status(400).json(errorCodes.QUESTION101);
       });
   } else {
     console.log(chalk.red(JSON.stringify(errorCodes.SERVER101)));

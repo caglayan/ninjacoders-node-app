@@ -7,7 +7,6 @@ const errorCodes = require("../../config/errorCodes.json");
 router.post("/add", function (req, res, next) {
   if (req.body.course && req.body.title && req.body.course && req.body.star) {
     console.log(chalk.yellow("create comment | title: " + req.body.title));
-
     Comment.findComment(req.user._id)
       .then((comment) => {
         console.log(chalk.green("Comment found."));
@@ -64,59 +63,80 @@ router.post("/find", function (req, res, next) {
     });
 });
 
-router.post("/removeComment", function (req, res, next) {
-  if (req.body.commentId && req.body._id) {
-    console.log(chalk.yellow("remove comment " + req.body._id));
-    Course.removeComment(req.body._id, req.body.commentId)
-      .then((course) => {
-        console.log(chalk.green("Course updated."));
-        return res.status(202).json({
-          status: 202,
-          msg: "Commment removed.",
-          course: course,
-        });
+/* POST update comment */
+
+router.post("/update", function (req, res, next) {
+  if (req.body.comment && req.body.body && req.body.title) {
+    console.log(chalk.yellow("update comment " + req.body.comment));
+    const commentData = {
+      title: req.body.title,
+      body: req.body.body,
+    };
+    Comment.findCommentOne(req.body.comment, commentData)
+      .then((comment) => {
+        if (comment.sender.toString() == req.user._id.toString()) {
+          const commentData = { body: req.body.body, title: req.body.title };
+          Comment.updateComment(commentData, req.body.comment)
+            .then((course) => {
+              console.log(chalk.green("Comment updated."));
+              return res.status(202).json({
+                status: 202,
+                msg: "Comment updated.",
+                course: course,
+              });
+            })
+            .catch((error) => {
+              console.log(chalk.red(JSON.stringify(errorCodes.COMMENT103)));
+              return res.status(400).json(errorCodes.COMMENT103);
+            });
+        } else {
+          console.log(chalk.red(JSON.stringify(errorCodes.COMMENT104)));
+          return res.status(400).json(errorCodes.COMMENT104);
+        }
       })
       .catch((error) => {
-        console.log(chalk.green(error.errmsg));
-        return res.status(400).json({
-          status: 400,
-          code: error.code,
-          errmsg: error.errmsg,
-        });
+        console.log(chalk.red(JSON.stringify(errorCodes.COMMENT101)));
+        return res.status(400).json(errorCodes.COMMENT101);
       });
   } else {
-    return res.status(411).json({
-      status: 411,
-      desc: "length required",
-    });
+    console.log(chalk.red(JSON.stringify(errorCodes.SERVER101)));
+    return res.status(400).json(errorCodes.SERVER101);
   }
 });
 
-router.post("/updateComment", function (req, res, next) {
-  if (req.body.comment._id && req.body._id) {
-    console.log(chalk.yellow("adding comment " + req.body._id));
-    Course.updateComment(req.body._id, req.body.comment)
-      .then((course) => {
-        console.log(chalk.green("Course updated."));
-        return res.status(202).json({
-          status: 202,
-          msg: "Course updated.",
-          course: course,
-        });
+/* POST remove comment */
+
+router.post("/remove", function (req, res, next) {
+  if (req.body.comment) {
+    console.log(chalk.yellow("remove comment " + req.body.comment));
+    Comment.findCommentOne(req.body.comment)
+      .then((comment) => {
+        if (comment.sender.toString() == req.user._id.toString()) {
+          Comment.removeComment(req.body.comment)
+            .then((response) => {
+              console.log(chalk.green("Comment removed."));
+              return res.status(202).json({
+                status: 202,
+                msg: "Comment removed.",
+                response: response,
+              });
+            })
+            .catch((error) => {
+              console.log(chalk.red(JSON.stringify(errorCodes.COMMENT103)));
+              return res.status(400).json(errorCodes.COMMENT103);
+            });
+        } else {
+          console.log(chalk.red(JSON.stringify(errorCodes.COMMENT104)));
+          return res.status(400).json(errorCodes.COMMENT104);
+        }
       })
       .catch((error) => {
-        console.log(chalk.green(error.errmsg));
-        return res.status(400).json({
-          status: 400,
-          code: error.code,
-          errmsg: error.errmsg,
-        });
+        console.log(chalk.red(JSON.stringify(errorCodes.COMMENT102)));
+        return res.status(400).json(errorCodes.COMMENT102);
       });
   } else {
-    return res.status(411).json({
-      status: 411,
-      desc: "length required",
-    });
+    console.log(chalk.red(JSON.stringify(errorCodes.SERVER101)));
+    return res.status(400).json(errorCodes.SERVER101);
   }
 });
 
