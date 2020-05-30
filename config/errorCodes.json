@@ -3,13 +3,13 @@
         "Code": "SERVER101",
         "Status": "400",
         "Error": "Requst is not acceptable.",
-        "Message": "An internal rrror is occured."
+        "Message": "An internal error is occured."
     },
     "USER100": {
         "Code": "USER101",
         "Status": "400",
         "Error": "User Update Problem ",
-        "Message": "An internal rrror is occured."
+        "Message": "An internal error is occured."
     },
     "USER101": {
         "Code": "USER101",
@@ -26,7 +26,7 @@
         "Code": "USER103",
         "Status": "500",
         "Error": "Internal Database Error for USER",
-        "Message": "An internal rrror is occured."
+        "Message": "An internal error is occured."
     },
     "USER104": {
         "Code": "USER104",
@@ -62,5 +62,29 @@
         "Code": "COURSE101",
         "Status": "400",
         "Message": "Course not found."
+    },
+    "COMMENT101": {
+        "Code": "COMMENT101",
+        "Status": "400",
+        "Error": "Comment Update: Comment is not Found",
+        "Message": "An internal error is occured."
+    },
+    "COMMENT102": {
+        "Code": "COMMENT102",
+        "Status": "500",
+        "Error": "Comment Create: Not created",
+        "Message": "An internal error is occured."
+    },
+    "COMMENT103": {
+        "Code": "COMMENT103",
+        "Status": "500",
+        "Error": "Internal Database Error for COMMENT",
+        "Message": "An internal error is occured."
+    },
+    "COMMENT104": {
+        "Code": "COMMENT104",
+        "Status": "400",
+        "Error": "Comment exists",
+        "Message": "You have already created a comment"
     }
 }

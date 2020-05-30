@@ -9,7 +9,23 @@ const AvatarImageSchema = new Schema({
   encoding: String,
 });
 
-const CommentSchema = new Schema(
+const AnswerSchema = new Schema(
+  {
+    sender: {
+      type: Schema.Types.ObjectId,
+      ref: "User",
+      required: true,
+    },
+    givenName: String,
+    familyName: String,
+    senderTitle: String,
+    body: String,
+    like: Number,
+  },
+  { timestamps: true }
+);
+
+const QuestionSchema = new Schema(
   {
     course: {
       type: Schema.Types.ObjectId,
@@ -27,9 +43,10 @@ const CommentSchema = new Schema(
     senderTitle: String,
     title: String,
     body: String,
-    star: Number,
+    like: Number,
+    answers: [AnswerSchema],
   },
   { timestamps: true }
 );
 
-module.exports = CommentSchema;
+module.exports = QuestionSchema;
