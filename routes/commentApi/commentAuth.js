@@ -24,14 +24,13 @@ router.post("/add", function (req, res, next) {
           familyName: req.user.familyName,
           star: req.body.star,
         };
-
         Comment.createComment(commentData)
           .then((comment) => {
             console.log(chalk.green("Comment created."));
             return res.status(202).json({
               status: 202,
               msg: "Comment created.",
-              course: comment,
+              comment: comment,
             });
           })
           .catch((error) => {
@@ -58,24 +57,24 @@ router.post("/find", function (req, res, next) {
       });
     })
     .catch((error) => {
-      console.log(chalk.red(JSON.stringify(errorCodes.COMMENT102)));
-      return res.status(400).json(errorCodes.COMMENT102);
+      console.log(chalk.red(JSON.stringify(errorCodes.COMMENT101)));
+      return res.status(400).json(errorCodes.COMMENT101);
     });
 });
 
 /* POST update comment */
 
 router.post("/update", function (req, res, next) {
-  if (req.body.comment && req.body.body && req.body.title) {
+  if (req.body.comment && req.body.body && req.body.title && req.body.star) {
     console.log(chalk.yellow("update comment " + req.body.comment));
-    const commentData = {
-      title: req.body.title,
-      body: req.body.body,
-    };
-    Comment.findCommentOne(req.body.comment, commentData)
+    Comment.findCommentOne(req.body.comment)
       .then((comment) => {
         if (comment.sender.toString() == req.user._id.toString()) {
-          const commentData = { body: req.body.body, title: req.body.title };
+          const commentData = {
+            title: req.body.title,
+            body: req.body.body,
+            star: req.body.star,
+          };
           Comment.updateComment(commentData, req.body.comment)
             .then((course) => {
               console.log(chalk.green("Comment updated."));

@@ -24,7 +24,7 @@ router.post("/add", function (req, res, next) {
         return res.status(202).json({
           status: 202,
           msg: "Question created.",
-          course: question,
+          question: question,
         });
       })
       .catch((error) => {

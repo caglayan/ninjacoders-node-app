@@ -72,6 +72,7 @@ CommentSchema.statics.updateComment = function (commentData, commentId) {
   delete commentData.givenName;
   delete commentData.familyName;
   return new Promise((resolve, reject) => {
+    console.log(commentData);
     Comment.findByIdAndUpdate(commentId, commentData, {
       new: true,
     })
