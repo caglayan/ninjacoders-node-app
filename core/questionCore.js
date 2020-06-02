@@ -65,6 +65,22 @@ QuestionSchema.statics.pullQuestions = function (limit, skip, courseId) {
   });
 };
 
+//Pull Questions
+QuestionSchema.statics.pullUserQuestions = function (limit, skip, userId) {
+  return new Promise((resolve, reject) => {
+    Question.find({
+      sender: userId,
+    })
+      .sort("-updatedAt")
+      .skip(skip)
+      .limit(limit)
+      .exec(function (err, questions) {
+        if (err) return reject(err);
+        return resolve(questions);
+      });
+  });
+};
+
 // Update Question with only un protected fields
 QuestionSchema.statics.updateQuestion = function (questionData, questionId) {
   delete questionData.course;

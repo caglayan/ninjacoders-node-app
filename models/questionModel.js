@@ -39,6 +39,7 @@ const QuestionSchema = new Schema(
       required: true,
     },
     avatarImage: AvatarImageSchema,
+    courseName: String,
     givenName: String,
     familyName: String,
     senderTitle: String,

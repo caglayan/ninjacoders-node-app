@@ -5,11 +5,11 @@ const errorCodes = require("../../config/errorCodes.json");
 
 /* POST create question */
 router.post("/add", function (req, res, next) {
-  console.log(req.body);
   if (req.body.course && req.body.title && req.body.body) {
-    console.log(chalk.yellow("create question | title: " + req.body.body));
+    console.log(chalk.yellow("create question | body: " + req.body.body));
     const questionData = {
       course: req.body.course,
+      courseName: req.body.courseName,
       title: req.body.title,
       body: req.body.body,
       sender: req.user._id,
@@ -121,6 +121,33 @@ router.post("/remove", function (req, res, next) {
       .catch((error) => {
         console.log(chalk.red(JSON.stringify(errorCodes.QUESTION102)));
         return res.status(400).json(errorCodes.QUESTION102);
+      });
+  } else {
+    console.log(chalk.red(JSON.stringify(errorCodes.SERVER101)));
+    return res.status(400).json(errorCodes.SERVER101);
+  }
+});
+
+/* POST find course. */
+router.post("/pull-user-questions", function (req, res, next) {
+  if (req.body.limit) {
+    console.log(
+      chalk.yellow(
+        "pull questions | limit: " + req.body.limit + "| skip: " + req.body.skip
+      )
+    );
+    Question.pullUserQuestions(req.body.limit, req.body.skip, req.user._id)
+      .then((questions) => {
+        console.log(chalk.green("Questions are pulled."));
+        return res.status(202).json({
+          status: 202,
+          msg: "Questions pulled.",
+          questions: questions,
+        });
+      })
+      .catch((error) => {
+        console.log(chalk.red(JSON.stringify(errorCodes.QUESTION101)));
+        return res.status(400).json(errorCodes.QUESTION101);
       });
   } else {
     console.log(chalk.red(JSON.stringify(errorCodes.SERVER101)));
