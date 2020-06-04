@@ -38,6 +38,7 @@ const ProductSchema = new Schema(
       content: String,
     },
     purchaseNumber: Number,
+    thumbnail: String,
     commentPoint: Number,
     isBelongNinja: Boolean,
     numberOfSections: Number,

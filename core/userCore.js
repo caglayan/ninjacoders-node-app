@@ -431,6 +431,32 @@ UserSchema.statics.signUser = function (user) {
   });
 };
 
+UserSchema.statics.wathVideo = function (video_id, course) {
+  return new Promise((resolve, reject) => {
+    user.token = jwt
+      .sign(
+        {
+          _id: user._id.toHexString(),
+          access: "auth",
+        },
+        tokenConfig.secret,
+        {
+          expiresIn: 86400,
+        }
+      )
+      .toString();
+    user
+      .save()
+      .then((user) => {
+        return resolve(user);
+      })
+      .catch((err) => {
+        console.log(chalk.red(JSON.stringify(err)));
+        return reject(errorCodes.USER103);
+      });
+  });
+};
+
 var User = mongoose.model("User", UserSchema);
 module.exports = User;
 

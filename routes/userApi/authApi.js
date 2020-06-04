@@ -3,6 +3,7 @@ const chalk = require("chalk");
 const sharp = require("sharp");
 const fileUpload = require("express-fileupload");
 const User = require("../../core/userCore");
+const Course = require("../../core/courseCore");
 const errorCodes = require("../../config/errorCodes.json");
 const successCodes = require("../../config/successCodes.json");
 
@@ -49,6 +50,84 @@ router.post("/updatepremium", function (req, res, next) {
         console.log(chalk.red(JSON.stringify(errorCodes.USER100)));
         return res.status(400).json(errorCodes.USER100);
       });
+  } else {
+    console.log(chalk.red(JSON.stringify(errorCodes.SERVER101)));
+    return res.status(400).json(errorCodes.SERVER101);
+  }
+});
+
+/// UPDATE WATCHED VIDEO///
+/* POST update user */
+router.post("/finish-video", function (req, res, next) {
+  if (req.body.video_id && req.body.course_id) {
+    console.log(
+      chalk.yellow(
+        "finished video | id: " +
+          req.body.video_id +
+          " course: " +
+          req.body.course_id
+      )
+    );
+    Course.findById(req.body.course_id)
+      .then((course) => {
+        console.log(chalk.green("Course found."));
+        var isExist = false;
+        req.user.registeredCourses = req.user.registeredCourses.map(
+          (registeredCourse) => {
+            if (registeredCourse._id.toString() === req.body.course_id) {
+              console.log(req.body.video_id);
+              console.log(registeredCourse.wathedVideos);
+              console.log(
+                registeredCourse.wathedVideos.includes(req.body.video_id)
+              );
+              isExist = true;
+              if (!registeredCourse.wathedVideos.includes(req.body.video_id)) {
+                console.log("registeredCourse.wathedVideos");
+                registeredCourse.wathedVideos.push(req.body.video_id);
+              }
+            }
+            return registeredCourse;
+          }
+        );
+        if (!isExist) {
+          const percentage = 1 / course.numberOfSections;
+          const registeredCourse = {
+            _id: req.body.course_id,
+            courseThumbNail: course.thumbNail,
+            wathedVideos: [req.body.video_id],
+            courseName: course.title,
+            instructor: course.instructor,
+            percentage,
+          };
+          req.user.registeredCourses.push(registeredCourse);
+        }
+        req.user
+          .save()
+          .then((user) => {
+            if (!user) {
+              error = errorCodes.USER101;
+              console.log(chalk.red(JSON.stringify(error)));
+            }
+            console.log(chalk.green("User new video added."));
+            return res.status(202).json({
+              status: 202,
+              msg: "User updated.",
+              user: user,
+            });
+          })
+          .catch((error) => {
+            console.log(error);
+            error = errorCodes.USER101;
+            console.log(chalk.red(JSON.stringify(error)));
+          });
+      })
+      .catch((error) => {
+        console.log(chalk.red(JSON.stringify(errorCodes.COURSE101)));
+        return res.status(400).json(errorCodes.COURSE101);
+      });
+  } else {
+    console.log(chalk.red(JSON.stringify(errorCodes.SERVER101)));
+    return res.status(400).json(errorCodes.SERVER101);
   }
 });
 

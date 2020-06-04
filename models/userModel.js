@@ -12,6 +12,22 @@ const AvatarImageSchema = new Schema(
   { timestamps: true }
 );
 
+const RegisteredCourseSchema = new Schema(
+  {
+    _id: {
+      type: Schema.Types.ObjectId,
+      ref: "Course",
+      required: true,
+    },
+    courseThumbNail: String,
+    wathedVideos: [String],
+    courseName: String,
+    instructor: Object,
+    percentage: Number,
+  },
+  { timestamps: true }
+);
+
 const UserSchema = new Schema(
   {
     email: {
@@ -36,6 +52,7 @@ const UserSchema = new Schema(
     familyName: String,
     avatarImageUrl: String,
     premium: Boolean,
+    registeredCourses: [RegisteredCourseSchema],
     token: {
       type: String,
       required: false,
