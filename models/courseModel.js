@@ -45,6 +45,7 @@ const ProductSchema = new Schema(
     studentNumber: Number,
     levelPoint: Number,
     duration: Number,
+    rating: Number,
     comments: [Comment],
     chapters: [],
     projects: [],

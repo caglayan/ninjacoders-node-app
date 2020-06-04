@@ -91,12 +91,18 @@ router.post("/finish-video", function (req, res, next) {
         );
         if (!isExist) {
           const percentage = 1 / course.numberOfSections;
+          console.log(course);
+          console.log(course.rating);
           const registeredCourse = {
             _id: req.body.course_id,
-            courseThumbNail: course.thumbNail,
+            courseThumbNail: course.thumbnail,
             wathedVideos: [req.body.video_id],
             courseName: course.title,
             instructor: course.instructor,
+            duration: course.duration,
+            studentNumber: course.studentNumber,
+            numberOfVideos: course.numberOfSections,
+            rating: course.rating,
             percentage,
           };
           req.user.registeredCourses.push(registeredCourse);
