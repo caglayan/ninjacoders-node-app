@@ -116,5 +116,12 @@
         "Status": "500",
         "Error": "Answer not found",
         "Message": "An internal error is occured."
+    },
+    "APP101": {
+        "Code": "ANSWER101",
+        "Status": "500",
+        "Error": "App not found",
+        "Message": "An internal error is occured."
     }
+
 }

@@ -75,11 +75,6 @@ router.post("/finish-video", function (req, res, next) {
         req.user.registeredCourses = req.user.registeredCourses.map(
           (registeredCourse) => {
             if (registeredCourse._id.toString() === req.body.course_id) {
-              console.log(req.body.video_id);
-              console.log(registeredCourse.wathedVideos);
-              console.log(
-                registeredCourse.wathedVideos.includes(req.body.video_id)
-              );
               isExist = true;
               if (!registeredCourse.wathedVideos.includes(req.body.video_id)) {
                 console.log("registeredCourse.wathedVideos");
@@ -95,13 +90,13 @@ router.post("/finish-video", function (req, res, next) {
           console.log(course.rating);
           const registeredCourse = {
             _id: req.body.course_id,
-            courseThumbNail: course.thumbnail,
+            thumbnail: course.thumbnail,
             wathedVideos: [req.body.video_id],
-            courseName: course.title,
+            name: course.title,
             instructor: course.instructor,
             duration: course.duration,
-            studentNumber: course.studentNumber,
-            numberOfVideos: course.numberOfSections,
+            students: course.studentNumber,
+            videos: course.numberOfSections,
             rating: course.rating,
             percentage,
           };
