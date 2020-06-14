@@ -32,10 +32,12 @@ const ProductSchema = new Schema(
       type: Array,
       default: ["NinjaCoders", "Kodlama", "Robotik"],
     },
-    instructor: Object,
+    instructorId: String,
+    commentId: String,
     description: {
       header: String,
-      content: String,
+      parap1: String,
+      parap2: String,
     },
     purchaseNumber: Number,
     thumbnail: String,
@@ -49,6 +51,8 @@ const ProductSchema = new Schema(
     comments: [Comment],
     chapters: [],
     projects: [],
+    instructor: Object,
+    bestComment: Object,
     patron: patronSchema,
   },
   { timestamps: true }

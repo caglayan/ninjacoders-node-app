@@ -1,5 +1,7 @@
 const router = require("express").Router();
 const Course = require("../../core/courseCore");
+const Instructor = require("../../core/instructorCore");
+const Comment = require("../../core/commentCore");
 const chalk = require("chalk");
 const errorCodes = require("../../config/errorCodes.json");
 
@@ -10,10 +12,16 @@ router.post("/find", function (req, res, next) {
     Course.findPublicCourse(req.body.course_id)
       .then((course) => {
         console.log(chalk.green("Course found."));
-        return res.status(202).json({
-          status: 202,
-          msg: "Course found.",
-          course: course,
+        Instructor.findInstructor(course.instructorId).then((instructor) => {
+          course.instructor = instructor;
+          Comment.findCommentOne(course.commentId).then((comment) => {
+            course.bestComment = comment;
+            return res.status(202).json({
+              status: 202,
+              msg: "Course found.",
+              course,
+            });
+          });
         });
       })
       .catch((error) => {
