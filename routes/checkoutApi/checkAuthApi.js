@@ -20,13 +20,12 @@ router.post("/payment", function (req, res, next) {
   var request = {
     locale: Iyzipay.LOCALE.TR,
     conversationId: "123456789",
-    price: "1",
-    paidPrice: "1.2",
+    price: "20",
+    paidPrice: "24.0",
     currency: Iyzipay.CURRENCY.TRY,
     basketId: "B67832",
     paymentGroup: Iyzipay.PAYMENT_GROUP.LISTING,
-    callbackUrl:
-      "https://ninjaoders-backend.herokuapp.com/api/checkout/unauth/payment-callback",
+    callbackUrl: "http://localhost:4000/api/checkout/unauth/payment-callback",
     enabledInstallments: [2, 3, 6, 9],
     buyer: {
       id: "BY789",
@@ -64,37 +63,17 @@ router.post("/payment", function (req, res, next) {
         category1: "Collectibles",
         category2: "Accessories",
         itemType: Iyzipay.BASKET_ITEM_TYPE.PHYSICAL,
-        price: "0.3",
-      },
-      {
-        id: "BI102",
-        name: "Game code",
-        category1: "Game",
-        category2: "Online Game Items",
-        itemType: Iyzipay.BASKET_ITEM_TYPE.VIRTUAL,
-        price: "0.5",
-      },
-      {
-        id: "BI103",
-        name: "Usb",
-        category1: "Electronics",
-        category2: "Usb / Cable",
-        itemType: Iyzipay.BASKET_ITEM_TYPE.PHYSICAL,
-        price: "0.2",
+        price: "20.0",
       },
     ],
   };
   iyzipay.checkoutFormInitialize.create(request, function (err, result) {
-    console.log(JSON.stringify(result));
+    //console.log(JSON.stringify(result));
     return res.status(202).json({
       status: 202,
       msg: "ok found.",
       result,
     });
-    // console.log(
-    //   result.checkoutFormContent +
-    //     '<div id="iyzipay-checkout-form" class="responsive"></div>'
-    // );
   });
 });
 
