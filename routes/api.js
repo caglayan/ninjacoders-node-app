@@ -4,7 +4,7 @@ const userApi = require("./userApi/userApi");
 const courseApi = require("./courseApi/courseApi");
 const commentApi = require("./commentApi/commentApi");
 const questionApi = require("./questionApi/questionApi");
-const checkoutApi = require("./checkoutApi/checkoutApi");
+const checkoutApi = require("./checkoutApi/checkApi");
 const applicationApi = require("./applicationApi/applicationApi");
 
 /* log all request for login page*/

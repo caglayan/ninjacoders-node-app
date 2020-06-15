@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
-const authApi = require("./authApi");
+const authApi = require("./checkAuthApi.js");
+const nonAuthApi = require("./checkNonAuth.js");
 const chalk = require("chalk");
 const User = require("../../core/userCore");
 const errorCodes = require("../../config/errorCodes.json");
@@ -12,6 +13,8 @@ router.all("/*", function (req, res, next) {
 });
 
 //----------------------------- now check authantication time -----------------------------
+
+router.use("/unauth", nonAuthApi);
 
 // catch tokens and forward to user api
 router.use(function (req, res, next) {
