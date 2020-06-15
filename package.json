@@ -1,12 +1,13 @@
 {
-  "name": "miuulbackend",
+  "name": "ninjabackend",
   "version": "1.0.0",
   "description": "",
   "main": "app.js",
   "bin": {
-    "miuulbackend": "bin.js"
+    "ninjabackend": "bin.js"
   },
   "scripts": {
+    "start": "node bin/bin.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "caglayanserbetci",
