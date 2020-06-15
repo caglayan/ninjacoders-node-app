@@ -25,7 +25,8 @@ router.post("/payment", function (req, res, next) {
     currency: Iyzipay.CURRENCY.TRY,
     basketId: "B67832",
     paymentGroup: Iyzipay.PAYMENT_GROUP.LISTING,
-    callbackUrl: "https://www.merchant.com/callback",
+    callbackUrl:
+      "https://ninjaoders-backend.herokuapp.com/api/checkout/unauth/payment-callback",
     enabledInstallments: [2, 3, 6, 9],
     buyer: {
       id: "BY789",
