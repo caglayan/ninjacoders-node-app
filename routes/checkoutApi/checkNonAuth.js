@@ -7,7 +7,7 @@ const errorCodes = require("../../config/errorCodes.json");
 
 /* POST find course. */
 router.post("/payment-callback", function (req, res, next) {
-  console.log(req.body);
+  console.log(req);
   return res.status(202).json({
     status: 202,
     msg: "Payment callback.",
