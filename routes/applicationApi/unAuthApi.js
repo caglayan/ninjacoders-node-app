@@ -1,5 +1,6 @@
 const router = require("express").Router();
 const Application = require("../../core/applicationCore");
+const CourseGroupCore = require("../../core/courseGroupCore");
 const chalk = require("chalk");
 const bcrypt = require("bcrypt");
 const errorCodes = require("../../config/errorCodes.json");
@@ -33,11 +34,34 @@ router.post("/find", function (req, res, next) {
   }
 });
 
+router.post("/findCourseGroup", function (req, res, next) {
+  if (req.body.group_id) {
+    console.log(chalk.yellow("find public | group id: " + req.body.group_id));
+    CourseGroupCore.findCourseGroup(req.body.group_id)
+      .then((courseGroup) => {
+        console.log(chalk.green("Application found."));
+        return res.status(202).json({
+          status: 202,
+          msg: "Course Group found.",
+          courseGroup,
+        });
+      })
+      .catch((error) => {
+        console.log(chalk.red(JSON.stringify(errorCodes.CGROUP101)));
+        return res.status(400).json(errorCodes.CGROUP101);
+      });
+  } else {
+    console.log(chalk.red(JSON.stringify(errorCodes.SERVER101)));
+    return res.status(400).json(errorCodes.SERVER101);
+  }
+});
+
 /* POST create application */
 // router.post("/create", function (req, res, next) {
-//   if (req.body.title) {
-//     console.log(chalk.yellow("create application | title: " + req.body.title));
-//     Application.createApplication(req.body)
+//   if (req.body.name) {
+//     console.log(chalk.yellow("create application | title: " + req.body.name));
+//     courseGroupCore
+//       .createCourseGroup(req.body)
 //       .then((application) => {
 //         console.log(chalk.green("Application created."));
 //         return res.status(202).json({

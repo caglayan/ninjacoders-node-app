@@ -1,5 +1,6 @@
 const mongoose = require("mongoose");
 const CourseSchema = require("../models/courseModel.js");
+const Instructor = require("./instructorCore");
 
 //Create Course
 CourseSchema.statics.createCourse = function (CourseData) {
@@ -11,6 +12,32 @@ CourseSchema.statics.createCourse = function (CourseData) {
       .catch((err) => {
         return reject(err);
       });
+  });
+};
+
+//Find atomic course
+CourseSchema.statics.findAtomicCourse = function (group_id) {
+  return new Promise((resolve, reject) => {
+    Course.find({
+      group_id,
+    }).exec(function (err, courses) {
+      if (err) return reject(err);
+      if (!courses) {
+        err = {
+          code: 404,
+          errmsg: "not found",
+        };
+        return reject(err);
+      }
+      courses = courses.map((course) => {
+        course = course.toObject();
+        delete course.chapters;
+        delete course.premium;
+        return course;
+      });
+      //console.log(courses);
+      return resolve(courses);
+    });
   });
 };
 
