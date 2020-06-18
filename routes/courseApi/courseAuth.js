@@ -29,6 +29,9 @@ router.post("/find", function (req, res, next) {
                   course.instructor = instructor;
                   Comment.findCommentOne(course.commentId).then((comment) => {
                     course.bestComment = comment;
+                    course.statistics.onlineStudents = Math.floor(
+                      Math.random() * (40 - 10) + 10
+                    );
                     return res.status(202).json({
                       status: 202,
                       msg: "Course found.",

@@ -17,7 +17,6 @@ CourseGroupSchema.statics.createCourseGroup = function (CourseGroupData) {
 
 //Find CourseGroup
 CourseGroupSchema.statics.findCourseGroup = function (_id) {
-  console.log(_id);
   return new Promise((resolve, reject) => {
     CourseGroup.findOne({ _id }).exec(function (err, courseGroup) {
       if (err) return reject(err);
@@ -28,14 +27,15 @@ CourseGroupSchema.statics.findCourseGroup = function (_id) {
         };
         return reject(err);
       }
-      Course.findAtomicCourse(courseGroup._id)
-        .then((courses) => {
-          courseGroup.courses = courses;
-          return resolve(courseGroup);
-        })
-        .catch((err) => {
-          return reject(err);
-        });
+      return resolve(courseGroup);
+      //   Course.findAtomicCourse(courseGroup._id)
+      //     .then((courses) => {
+      //       courseGroup.courses = courses;
+      //       return resolve(courseGroup);
+      //     })
+      //     .catch((err) => {
+      //       return reject(err);
+      //     });
     });
   });
 };

@@ -6,6 +6,8 @@ const User = require("../../core/userCore");
 const Course = require("../../core/courseCore");
 const errorCodes = require("../../config/errorCodes.json");
 const successCodes = require("../../config/successCodes.json");
+const mailService = require("../../services/mailService");
+const CourseGroupCore = require("../../core/courseGroupCore");
 
 /// UPDATE USER ///
 /* POST update user */
@@ -182,6 +184,47 @@ router.post("/remove", function (req, res, next) {
       console.log(chalk.red(JSON.stringify(error)));
       return res.status(400).json(error);
     });
+});
+
+// SEND CERTIFICATE API //
+/* POST create user */
+router.post("/requestCer", function (req, res, next) {
+  if (req.body.email && req.body.group_id) {
+    console.log(
+      chalk.yellow("request Certificiate user | email: " + req.body.email)
+    );
+
+    CourseGroupCore.findCourseGroup(req.body.group_id)
+      .then((courseGroup) => {
+        console.log(chalk.green("CourseGroup found."));
+        mailService.sendNinjaTeamMail(
+          "certificate",
+          "Yeni bir sertifika isteği",
+          req.user,
+          req.body.email,
+          courseGroup,
+          (error, info) => {
+            if (error) {
+              error = errorCodes.MAIL101;
+              console.log(chalk.red(JSON.stringify(error)));
+              return res.status(400).json(error);
+            } else {
+              return res.status(202).json({
+                status: 202,
+                msg: "email sended.",
+              });
+            }
+          }
+        );
+      })
+      .catch((error) => {
+        console.log(chalk.red(JSON.stringify(errorCodes.CGROUP101)));
+        return res.status(400).json(errorCodes.CGROUP101);
+      });
+  } else {
+    console.log(chalk.red(JSON.stringify(errorCodes.SERVER101)));
+    return res.status(400).json(errorCodes.SERVER101);
+  }
 });
 
 /// UPDATE PROFILE IMAGE ///

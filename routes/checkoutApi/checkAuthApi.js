@@ -12,9 +12,9 @@ const Iyzipay = require("iyzipay");
 
 router.post("/payment", function (req, res, next) {
   var iyzipay = new Iyzipay({
-    apiKey: "sandbox-afXhZPW0MQlE4dCUUlHcEopnMBgXnAZI",
-    secretKey: "sandbox-wbwpzKIiplZxI3hh5ALI4FJyAcZKL6kq",
-    uri: "https://sandbox-api.iyzipay.com",
+    apiKey: "Mx4Gq1BCDTa81YwuiYLo0xnYmay73gGK",
+    secretKey: "288ZzZNcCa2SCl8OUVmH8iirFtK3CBtj",
+    uri: "https://ninjacoders.co",
   });
 
   var request = {
