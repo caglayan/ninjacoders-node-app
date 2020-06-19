@@ -14,7 +14,7 @@ router.post("/payment", function (req, res, next) {
   var iyzipay = new Iyzipay({
     apiKey: "Mx4Gq1BCDTa81YwuiYLo0xnYmay73gGK",
     secretKey: "288ZzZNcCa2SCl8OUVmH8iirFtK3CBtj",
-    uri: "https://ninjacoders.co",
+    uri: "https://api.iyzipay.com",
   });
 
   var request = {
