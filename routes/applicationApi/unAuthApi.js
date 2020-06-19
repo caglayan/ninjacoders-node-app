@@ -1,7 +1,6 @@
 const router = require("express").Router();
 const Code = require("../../core/applicationCore");
 const CourseGroupCore = require("../../core/courseGroupCore");
-const AppCodeCore = require("../../core/appCodeCore");
 const chalk = require("chalk");
 const bcrypt = require("bcrypt");
 const errorCodes = require("../../config/errorCodes.json");
