@@ -10,12 +10,21 @@ const Iyzipay = require("iyzipay");
 
 /// PAYMENT ///
 
+//https://sandbox-api.iyzipay.com/payment/iyzipos/checkoutform/callback3ds/success/2
+
+// https://api.iyzipay.com/payment/iyzipos/checkoutform/callback3ds/failure/86
 router.post("/payment", function (req, res, next) {
   var iyzipay = new Iyzipay({
     apiKey: "Mx4Gq1BCDTa81YwuiYLo0xnYmay73gGK",
     secretKey: "288ZzZNcCa2SCl8OUVmH8iirFtK3CBtj",
     uri: "https://api.iyzipay.com",
   });
+
+  // var iyzipay = new Iyzipay({
+  //   apiKey: "sandbox-afXhZPW0MQlE4dCUUlHcEopnMBgXnAZI",
+  //   secretKey: "sandbox-wbwpzKIiplZxI3hh5ALI4FJyAcZKL6kq",
+  //   uri: "https://sandbox-api.iyzipay.com",
+  // });
 
   var request = {
     locale: Iyzipay.LOCALE.TR,
@@ -25,7 +34,8 @@ router.post("/payment", function (req, res, next) {
     currency: Iyzipay.CURRENCY.TRY,
     basketId: "B67832",
     paymentGroup: Iyzipay.PAYMENT_GROUP.LISTING,
-    callbackUrl: "http://localhost:4000/api/checkout/unauth/payment-callback",
+    callbackUrl:
+      "https://ninjaoders-backend.herokuapp.com/api/checkout/unauth/payment-callback",
     enabledInstallments: [2, 3, 6, 9],
     buyer: {
       id: "BY789",

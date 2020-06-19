@@ -14,11 +14,14 @@ var iyzipay = new Iyzipay({
 
 /* POST find course. */
 router.post("/payment-callback", function (req, res, next) {
-  console.log(req);
+  //console.log(req);
   console.log("token", req.headers);
   console.log("conversationId", req.conversationId);
   console.log("status", req.status);
-  console.log("status", req.body);
+  console.log("paymentId", req.paymentId);
+  console.log("conversationData", req.conversationData);
+  console.log("mdStatus", req.mdStatus);
+
   iyzipay.checkoutForm.retrieve(
     {
       locale: Iyzipay.LOCALE.TR,
@@ -27,7 +30,9 @@ router.post("/payment-callback", function (req, res, next) {
     },
     function (err, result) {
       console.log(result);
-      return res.redirect("http://localhost:3000/user/checkout/deneme");
+      return res.status(200).json(res);
+
+      //return res.redirect("http://localhost:3000/user/checkout/deneme");
     }
   );
 });
