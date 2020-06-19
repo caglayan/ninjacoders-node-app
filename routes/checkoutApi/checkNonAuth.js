@@ -14,7 +14,7 @@ var iyzipay = new Iyzipay({
 
 /* POST find course. */
 router.post("/payment-callback", function (req, res, next) {
-  //console.log(req);
+  console.log(req);
   console.log("header", req.headers);
   console.log("conversationId", req.conversationId);
   console.log("status", req.status);
