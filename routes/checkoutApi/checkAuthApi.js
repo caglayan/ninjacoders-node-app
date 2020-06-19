@@ -14,17 +14,17 @@ const Iyzipay = require("iyzipay");
 
 // https://api.iyzipay.com/payment/iyzipos/checkoutform/callback3ds/failure/86
 router.post("/payment", function (req, res, next) {
-  var iyzipay = new Iyzipay({
-    apiKey: "Mx4Gq1BCDTa81YwuiYLo0xnYmay73gGK",
-    secretKey: "288ZzZNcCa2SCl8OUVmH8iirFtK3CBtj",
-    uri: "https://api.iyzipay.com",
-  });
-
   // var iyzipay = new Iyzipay({
-  //   apiKey: "sandbox-afXhZPW0MQlE4dCUUlHcEopnMBgXnAZI",
-  //   secretKey: "sandbox-wbwpzKIiplZxI3hh5ALI4FJyAcZKL6kq",
-  //   uri: "https://sandbox-api.iyzipay.com",
+  //   apiKey: "Mx4Gq1BCDTa81YwuiYLo0xnYmay73gGK",
+  //   secretKey: "288ZzZNcCa2SCl8OUVmH8iirFtK3CBtj",
+  //   uri: "https://api.iyzipay.com",
   // });
+
+  var iyzipay = new Iyzipay({
+    apiKey: "sandbox-afXhZPW0MQlE4dCUUlHcEopnMBgXnAZI",
+    secretKey: "sandbox-wbwpzKIiplZxI3hh5ALI4FJyAcZKL6kq",
+    uri: "https://sandbox-api.iyzipay.com",
+  });
 
   var request = {
     locale: Iyzipay.LOCALE.TR,

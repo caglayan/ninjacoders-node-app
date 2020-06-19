@@ -15,7 +15,7 @@ var iyzipay = new Iyzipay({
 /* POST find course. */
 router.post("/payment-callback", function (req, res, next) {
   //console.log(req);
-  console.log("token", req.headers);
+  console.log("header", req.headers);
   console.log("conversationId", req.conversationId);
   console.log("status", req.status);
   console.log("paymentId", req.paymentId);
@@ -30,9 +30,9 @@ router.post("/payment-callback", function (req, res, next) {
     },
     function (err, result) {
       console.log(result);
-      return res.status(200).json(res);
+      console.log(err);
 
-      //return res.redirect("http://localhost:3000/user/checkout/deneme");
+      return res.redirect("http://localhost:3000/user/checkout/deneme");
     }
   );
 });
