@@ -18,6 +18,7 @@ router.post("/payment-callback", function (req, res, next) {
   console.log("token", req.headers);
   console.log("conversationId", req.conversationId);
   console.log("status", req.status);
+  console.log("status", req.body);
   iyzipay.checkoutForm.retrieve(
     {
       locale: Iyzipay.LOCALE.TR,
