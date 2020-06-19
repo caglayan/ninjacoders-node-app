@@ -68,10 +68,11 @@ router.post("/payment", function (req, res, next) {
     ],
   };
   iyzipay.checkoutFormInitialize.create(request, function (err, result) {
-    //console.log(JSON.stringify(result));
+    console.log(JSON.stringify(result));
     return res.status(202).json({
       status: 202,
       msg: "ok found.",
+
       result,
     });
   });

@@ -32,6 +32,7 @@ router.use(function (req, res, next) {
       return next();
     })
     .catch((error) => {
+      console.log("love");
       error = errorCodes.SECURITY102;
       console.log(chalk.red(JSON.stringify(error)));
       return res.status(400).json(error);

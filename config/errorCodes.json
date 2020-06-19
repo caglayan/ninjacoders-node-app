@@ -134,6 +134,12 @@
         "Status": "500",
         "Error": "Course Group not found",
         "Message": "An internal error is occured."
+    },
+    "APPCODE101": {
+        "Code": "APPCODE101",
+        "Status": "500",
+        "Error": "App code not found",
+        "Message": "An internal error is occured."
     }
 
 }

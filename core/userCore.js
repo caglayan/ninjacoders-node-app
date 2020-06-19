@@ -289,7 +289,8 @@ UserSchema.statics.findByToken = function (token) {
         }
         if (!user) {
           err = errorCodes.USER101;
-          console.log(chalk.red(JSON.stringify(err)));
+          //console.log(chalk.red(JSON.stringify(err)));
+          console.log("User not found with this token. BUG!");
           return reject(err);
         }
         resolve(user);
