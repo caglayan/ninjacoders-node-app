@@ -29,18 +29,6 @@ ApplicationSchema.statics.findPublicApplication = function (_id) {
         return reject(err);
       }
 
-      var assd = application.courseGroups.filter((courseGroups) => {
-        Course.findAtomicCourse(courseGroups._id)
-          .then((courses) => {
-            courseGroups.courses = courses;
-            console.log("asd", courseGroups.courses);
-            return courseGroups;
-          })
-          .catch((error) => {
-            return courseGroups;
-          });
-      });
-      console.log("lld", assd);
       return resolve(application);
     });
   });

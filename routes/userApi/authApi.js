@@ -74,12 +74,18 @@ router.post("/finish-video", function (req, res, next) {
       .then((course) => {
         console.log(chalk.green("Course found."));
         var isExist = false;
+        var numberOfVideosCourse = 0;
+        course.chapters.map((chapter) => {
+          numberOfVideosCourse = numberOfVideosCourse + chapter.sections.length;
+        });
         req.user.registeredCourses = req.user.registeredCourses.map(
           (registeredCourse) => {
             if (registeredCourse._id.toString() === req.body.course_id) {
               isExist = true;
               if (!registeredCourse.wathedVideos.includes(req.body.video_id)) {
-                console.log("registeredCourse.wathedVideos");
+                registeredCourse.percentage =
+                  (registeredCourse.percentage * numberOfVideosCourse + 1) /
+                  numberOfVideosCourse;
                 registeredCourse.wathedVideos.push(req.body.video_id);
               }
             }
@@ -87,19 +93,11 @@ router.post("/finish-video", function (req, res, next) {
           }
         );
         if (!isExist) {
-          const percentage = 1 / course.numberOfSections;
-          console.log(course);
-          console.log(course.rating);
+          const percentage = 1 / numberOfVideosCourse;
           const registeredCourse = {
             _id: req.body.course_id,
-            thumbnail: course.thumbnail,
             wathedVideos: [req.body.video_id],
             name: course.title,
-            instructor: course.instructor,
-            duration: course.duration,
-            students: course.studentNumber,
-            videos: course.numberOfSections,
-            rating: course.rating,
             percentage,
           };
           req.user.registeredCourses.push(registeredCourse);

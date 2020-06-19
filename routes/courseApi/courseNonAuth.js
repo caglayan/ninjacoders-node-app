@@ -34,4 +34,27 @@ router.post("/find", function (req, res, next) {
   }
 });
 
+/* POST find course. */
+router.post("/findatomic", function (req, res, next) {
+  if (req.body.course_id) {
+    console.log(chalk.yellow("find public | course id: " + req.body.course_id));
+    Course.findOneAtomicCourse(req.body.course_id)
+      .then((course) => {
+        console.log(chalk.green("Course found."));
+        return res.status(202).json({
+          status: 202,
+          msg: "Course found.",
+          course,
+        });
+      })
+      .catch((error) => {
+        console.log(chalk.red(JSON.stringify(errorCodes.COURSE101)));
+        return res.status(400).json(errorCodes.COURSE101);
+      });
+  } else {
+    console.log(chalk.red(JSON.stringify(errorCodes.SERVER101)));
+    return res.status(400).json(errorCodes.SERVER101);
+  }
+});
+
 module.exports = router;

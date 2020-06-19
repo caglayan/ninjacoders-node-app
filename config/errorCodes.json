@@ -87,6 +87,12 @@
         "Error": "Comment exists",
         "Message": "You have already created a comment"
     },
+    "COMMENT105": {
+        "Code": "COMMENT105",
+        "Status": "400",
+        "Error": "Comment not found",
+        "Message": "Yorum bulunamadı."
+    },
     "QUESTION101": {
         "Code": "QUESTION101",
         "Status": "400",

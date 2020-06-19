@@ -16,17 +16,20 @@ CommentSchema.statics.createComment = function (CommentData) {
 };
 
 //Find Comment with userId
-CommentSchema.statics.findComment = function (user_id) {
+CommentSchema.statics.findComment = function (user_id, courseId) {
   return new Promise((resolve, reject) => {
-    Comment.findOne({ sender: user_id }).exec(function (err, comment) {
+    Comment.findOne({ sender: user_id, course: courseId }).exec(function (
+      err,
+      comment
+    ) {
       if (err) return reject(err);
-      if (!comment) {
-        err = {
-          code: 404,
-          errmsg: "not found",
-        };
-        return reject(err);
-      }
+      // if (!comment) {
+      //   err = {
+      //     code: 404,
+      //     errmsg: "Comment is not found",
+      //   };
+      //   return reject(err);
+      // }
       return resolve(comment);
     });
   });

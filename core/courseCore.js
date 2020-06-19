@@ -15,8 +15,8 @@ CourseSchema.statics.createCourse = function (CourseData) {
   });
 };
 
-//Find atomic course
-CourseSchema.statics.findAtomicCourse = function (group_id) {
+//Find Many atomic course
+CourseSchema.statics.findAtomicCoursesMany = function (group_id) {
   return new Promise((resolve, reject) => {
     Course.find({
       group_id,
@@ -37,6 +37,28 @@ CourseSchema.statics.findAtomicCourse = function (group_id) {
       });
       //console.log(courses);
       return resolve(courses);
+    });
+  });
+};
+
+//Find one atomic course
+CourseSchema.statics.findOneAtomicCourse = function (_id) {
+  return new Promise((resolve, reject) => {
+    Course.findOne({
+      _id,
+    }).exec(function (err, course) {
+      if (err) return reject(err);
+      if (!course) {
+        err = {
+          code: 404,
+          errmsg: "not found",
+        };
+        return reject(err);
+      }
+      course = course.toObject();
+      delete course.chapters;
+      delete course.premium;
+      return resolve(course);
     });
   });
 };
