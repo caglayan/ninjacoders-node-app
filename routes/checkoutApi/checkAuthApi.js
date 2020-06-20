@@ -7,85 +7,181 @@ const Course = require("../../core/courseCore");
 const errorCodes = require("../../config/errorCodes.json");
 const successCodes = require("../../config/successCodes.json");
 const Iyzipay = require("iyzipay");
+const AppCodeCore = require("../../core/appCodeCore");
+const CourseGroupCore = require("../../core/courseGroupCore");
 
 /// PAYMENT ///
 
 //https://sandbox-api.iyzipay.com/payment/iyzipos/checkoutform/callback3ds/success/2
 
 // https://api.iyzipay.com/payment/iyzipos/checkoutform/callback3ds/failure/86
+
+// var iyzipay = new Iyzipay({
+//   apiKey: "Mx4Gq1BCDTa81YwuiYLo0xnYmay73gGK",
+//   secretKey: "288ZzZNcCa2SCl8OUVmH8iirFtK3CBtj",
+//   uri: "https://api.iyzipay.com",
+// });
+
+var iyzipay = new Iyzipay({
+  apiKey: "sandbox-4rDk6qMPf77F2RJxpBgOf7vQG47C6KHQ",
+  secretKey: "sandbox-p19OiUuwV1068yzweYrcw6an1f8f5pIF",
+  uri: "https://sandbox-api.iyzipay.com",
+});
+
 router.post("/payment", function (req, res, next) {
-  // var iyzipay = new Iyzipay({
-  //   apiKey: "Mx4Gq1BCDTa81YwuiYLo0xnYmay73gGK",
-  //   secretKey: "288ZzZNcCa2SCl8OUVmH8iirFtK3CBtj",
-  //   uri: "https://api.iyzipay.com",
-  // });
+  console.log(req.body);
+  if (req.body.group_id) {
+    console.log(chalk.yellow("find public | group id: " + req.body.group_id));
+    CourseGroupCore.findCourseGroup(req.body.group_id)
+      .then((courseGroup) => {
+        console.log(chalk.green("Course Group found."));
+        courseGroup = courseGroup.toObject();
+        if (req.body.code_name) {
+          console.log("code name", req.body.code_name);
+          payWithCode(res, courseGroup, req.body.code_name, req.user);
+        } else {
+          payWithoutCode(res, courseGroup, req.user);
+        }
+      })
+      .catch((error) => {
+        console.log(chalk.red(JSON.stringify(errorCodes.CGROUP101)));
+        return res.status(400).json(errorCodes.CGROUP101);
+      });
+  }
+});
 
-  var iyzipay = new Iyzipay({
-    apiKey: "sandbox-afXhZPW0MQlE4dCUUlHcEopnMBgXnAZI",
-    secretKey: "sandbox-wbwpzKIiplZxI3hh5ALI4FJyAcZKL6kq",
-    uri: "https://sandbox-api.iyzipay.com",
-  });
+const payWithCode = (res, courseGroup, codeName, user) => {
+  AppCodeCore.findCode(codeName, courseGroup._id, "sale")
+    .then((code) => {
+      console.log(chalk.green("Code found."));
+      code = code.toObject();
+      var paidPrice =
+        courseGroup.price.base - courseGroup.price.base * code.sale;
 
+      var request = {
+        locale: Iyzipay.LOCALE.TR,
+        conversationId: user._id.toString(),
+        price: courseGroup.price.base.toString(),
+        paidPrice: paidPrice.toString(),
+        currency: Iyzipay.CURRENCY.TRY,
+        basketId: "NINJABASKET",
+        paymentGroup: Iyzipay.PAYMENT_GROUP.PRODUCT,
+        callbackUrl:
+          "http://localhost:4000/api/checkout/unauth/payment-callback?user_id=" +
+          user._id.toString(),
+        enabledInstallments: [1],
+        buyer: {
+          id: user._id.toString(),
+          name: user.givenName.toString(),
+          surname: user.familyName.toString(),
+          //gsmNumber: "+905350000000",
+          email: user.email.toString(),
+          identityNumber: "123123123",
+          lastLoginDate: "2015-10-05 12:43:35",
+          registrationDate: "2013-04-21 15:12:09",
+          registrationAddress: "Boğaziçi Üniversitesi",
+          ip: "85.34.78.112",
+          city: "Istanbul",
+          country: "Turkey",
+          zipCode: "34340",
+        },
+
+        billingAddress: {
+          contactName:
+            user.givenName.toString() + " " + user.familyName.toString(),
+          city: "Istanbul",
+          country: "Turkey",
+          address: "Boğaziçi Üniversitesi",
+          zipCode: "34340",
+        },
+        basketItems: [
+          {
+            id: courseGroup._id.toString(),
+            name: courseGroup.name,
+            category1: "Course Group",
+            itemType: Iyzipay.BASKET_ITEM_TYPE.VIRTUAL,
+            price: courseGroup.price.base.toString(),
+          },
+        ],
+      };
+      iyzipay.checkoutFormInitialize.create(request, function (err, result) {
+        console.log(result);
+        return res.status(202).json({
+          status: 202,
+          msg: "ok found.",
+          result,
+        });
+      });
+    })
+    .catch((error) => {
+      console.log(chalk.red(JSON.stringify(errorCodes.APPCODE101)));
+      return res.status(400).json(errorCodes.APPCODE101);
+    });
+};
+
+const payWithoutCode = (res, courseGroup, user) => {
+  var paidPrice;
+  console.log(courseGroup.price);
+  if (courseGroup.price.isSale) {
+    paidPrice =
+      courseGroup.price.base - courseGroup.price.base * courseGroup.price.sale;
+  } else {
+    paidPrice = courseGroup.price.base;
+  }
+  //console.log(user);
   var request = {
     locale: Iyzipay.LOCALE.TR,
-    conversationId: "123456789",
-    price: "20",
-    paidPrice: "24.0",
+    conversationId: user._id.toString(),
+    price: courseGroup.price.base.toString(),
+    paidPrice: paidPrice.toString(),
     currency: Iyzipay.CURRENCY.TRY,
-    basketId: "B67832",
-    paymentGroup: Iyzipay.PAYMENT_GROUP.LISTING,
+    basketId: "NINJABASKET",
+    paymentGroup: Iyzipay.PAYMENT_GROUP.PRODUCT,
     callbackUrl:
-      "https://ninjaoders-backend.herokuapp.com/api/checkout/unauth/payment-callback",
-    enabledInstallments: [2, 3, 6, 9],
+      "http://localhost:4000/api/checkout/unauth/payment-callback?user_id=" +
+      user._id.toString(),
+    enabledInstallments: [1],
     buyer: {
-      id: "BY789",
-      name: "John",
-      surname: "Doe",
-      gsmNumber: "+905350000000",
-      email: "email@email.com",
-      identityNumber: "74300864791",
+      id: user._id.toString(),
+      name: user.givenName.toString(),
+      surname: user.familyName.toString(),
+      //gsmNumber: "+905350000000",
+      email: user.email.toString(),
+      identityNumber: "123123123",
       lastLoginDate: "2015-10-05 12:43:35",
       registrationDate: "2013-04-21 15:12:09",
-      registrationAddress: "Nidakule Göztepe, Merdivenköy Mah. Bora Sok. No:1",
+      registrationAddress: "Boğaziçi Üniversitesi",
       ip: "85.34.78.112",
       city: "Istanbul",
       country: "Turkey",
-      zipCode: "34732",
+      zipCode: "34340",
     },
-    shippingAddress: {
-      contactName: "Jane Doe",
-      city: "Istanbul",
-      country: "Turkey",
-      address: "Nidakule Göztepe, Merdivenköy Mah. Bora Sok. No:1",
-      zipCode: "34742",
-    },
+
     billingAddress: {
-      contactName: "Jane Doe",
+      contactName: user.givenName.toString() + " " + user.familyName.toString(),
       city: "Istanbul",
       country: "Turkey",
-      address: "Nidakule Göztepe, Merdivenköy Mah. Bora Sok. No:1",
-      zipCode: "34742",
+      address: "Boğaziçi Üniversitesi",
+      zipCode: "34340",
     },
     basketItems: [
       {
-        id: "BI101",
-        name: "Binocular",
-        category1: "Collectibles",
-        category2: "Accessories",
-        itemType: Iyzipay.BASKET_ITEM_TYPE.PHYSICAL,
-        price: "20.0",
+        id: courseGroup._id.toString(),
+        name: courseGroup.name,
+        category1: "Course Group",
+        itemType: Iyzipay.BASKET_ITEM_TYPE.VIRTUAL,
+        price: courseGroup.price.base.toString(),
       },
     ],
   };
   iyzipay.checkoutFormInitialize.create(request, function (err, result) {
-    console.log(JSON.stringify(result));
+    //console.log(result);
     return res.status(202).json({
       status: 202,
       msg: "ok found.",
-
       result,
     });
   });
-});
+};
 
 module.exports = router;

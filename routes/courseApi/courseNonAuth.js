@@ -9,13 +9,17 @@ const errorCodes = require("../../config/errorCodes.json");
 router.post("/find", function (req, res, next) {
   if (req.body.course_id) {
     console.log(chalk.yellow("find public | course id: " + req.body.course_id));
-    Course.findPublicCourse(req.body.course_id)
+    Course.findCourse(req.body.course_id)
       .then((course) => {
         console.log(chalk.green("Course found."));
+        course = Course.makeCoursePublic(course);
         Instructor.findInstructor(course.instructorId).then((instructor) => {
           course.instructor = instructor;
           Comment.findCommentOne(course.commentId).then((comment) => {
             course.bestComment = comment;
+            course.statistics.onlineStudents = Math.floor(
+              Math.random() * (40 - 10) + 10
+            );
             return res.status(202).json({
               status: 202,
               msg: "Course found.",
@@ -37,7 +41,7 @@ router.post("/find", function (req, res, next) {
 /* POST find course. */
 router.post("/findatomic", function (req, res, next) {
   if (req.body.course_id) {
-    console.log(chalk.yellow("find public | course id: " + req.body.course_id));
+    console.log(chalk.yellow("find atomic | course id: " + req.body.course_id));
     Course.findOneAtomicCourse(req.body.course_id)
       .then((course) => {
         console.log(chalk.green("Course found."));

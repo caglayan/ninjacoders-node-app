@@ -5,34 +5,87 @@ const Comment = require("../../core/commentCore");
 const chalk = require("chalk");
 const errorCodes = require("../../config/errorCodes.json");
 var Iyzipay = require("iyzipay");
+const User = require("../../core/userCore");
+const CourseGroupCore = require("../../core/courseGroupCore");
 
 var iyzipay = new Iyzipay({
-  apiKey: "sandbox-afXhZPW0MQlE4dCUUlHcEopnMBgXnAZI",
-  secretKey: "sandbox-wbwpzKIiplZxI3hh5ALI4FJyAcZKL6kq",
+  apiKey: "sandbox-4rDk6qMPf77F2RJxpBgOf7vQG47C6KHQ",
+  secretKey: "sandbox-p19OiUuwV1068yzweYrcw6an1f8f5pIF",
   uri: "https://sandbox-api.iyzipay.com",
 });
 
 /* POST find course. */
 router.post("/payment-callback", function (req, res, next) {
-  console.log(req);
-  console.log("header", req.headers);
-  console.log("conversationId", req.conversationId);
-  console.log("status", req.status);
-  console.log("paymentId", req.paymentId);
-  console.log("conversationData", req.conversationData);
-  console.log("mdStatus", req.mdStatus);
-
   iyzipay.checkoutForm.retrieve(
     {
       locale: Iyzipay.LOCALE.TR,
-      conversationId: "123456789",
-      token: "token",
+      conversationId: req.query.user_id,
+      token: req.body.token,
     },
     function (err, result) {
-      console.log(result);
-      console.log(err);
+      //console.log(result);
+      //console.log(err);
+      if (result.status === "failure") {
+        return res.redirect(
+          "http://localhost:3000/user/checkout?courseGroup=" +
+            result.itemTransactions[0].itemId +
+            "&error=" +
+            result.errorCode +
+            ": " +
+            result.errorMessage
+        );
+      } else {
+        User.findUserById(result.conversationId)
+          .then((user) => {
+            console.log(chalk.green("User found"));
+            const premiumCourseGroup = {
+              courseGroup_id: result.itemTransactions[0].itemId,
+              paymentTransactionId: result.paymentId,
+              paidPrice: result.paidPrice,
+            };
+            console.log(result.itemTransactions[0].itemId);
+            CourseGroupCore.findCourseGroup(
+              result.itemTransactions[0].itemId
+            ).then((courseGroup) => {
+              console.log(chalk.green("Course Group found."));
+              courseGroup.students.push(user._id);
+              console.log(courseGroup);
+              courseGroup.save().then(() => {
+                console.log(chalk.green("Course Group updated."));
 
-      return res.redirect("http://localhost:3000/user/checkout/deneme");
+                user.premiumCourseGroups.push(premiumCourseGroup);
+                user.save().then((user) => {
+                  if (!user) {
+                    return res.redirect(
+                      "http://localhost:3000/user/checkout?courseGroup=" +
+                        result.itemTransactions[0].itemId +
+                        "&error=" +
+                        "NinjaCoders Error" +
+                        ": " +
+                        "Kullanıcı bulunamadı."
+                    );
+                  }
+                  console.log(chalk.green("Successfull Payment"));
+                  return res.redirect(
+                    "http://localhost:3000/user/success?courseGroup=" +
+                      result.itemTransactions[0].itemId
+                  );
+                });
+              });
+            });
+          })
+          .catch((err) => {
+            console.log(chalk.green(err));
+            return res.redirect(
+              "http://localhost:3000/user/checkout?courseGroup=" +
+                result.itemTransactions[0].itemId +
+                "&error=" +
+                "NinjaCoders Error" +
+                ": " +
+                "NinjaCoders tarafında bir hata oluştu."
+            );
+          });
+      }
     }
   );
 });

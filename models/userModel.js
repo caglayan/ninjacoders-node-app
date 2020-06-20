@@ -32,6 +32,19 @@ const RegisteredCourseSchema = new Schema(
   { timestamps: true }
 );
 
+const PremiumCourseGroupSchema = new Schema(
+  {
+    courseGroup_id: {
+      type: Schema.Types.ObjectId,
+      ref: "CourseGroup",
+      required: true,
+    },
+    paymentTransactionId: String,
+    paidPrice: Number,
+  },
+  { timestamps: true }
+);
+
 const UserSchema = new Schema(
   {
     email: {
@@ -55,8 +68,9 @@ const UserSchema = new Schema(
     givenName: String,
     familyName: String,
     avatarImageUrl: String,
-    premium: Boolean,
+    //premium: Boolean,
     registeredCourses: [RegisteredCourseSchema],
+    premiumCourseGroups: [PremiumCourseGroupSchema],
     token: {
       type: String,
       required: false,

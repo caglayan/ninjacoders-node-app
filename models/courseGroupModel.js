@@ -6,6 +6,7 @@ const CourseGroupSchmea = new Schema(
     buttonName: String,
     CM: Object,
     courses: [Object],
+    students: [String],
   },
   { timestamps: true }
 );

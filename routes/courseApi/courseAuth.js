@@ -4,62 +4,53 @@ const User = require("../../core/userCore");
 const Instructor = require("../../core/instructorCore");
 const Comment = require("../../core/commentCore");
 const chalk = require("chalk");
+const errorCodes = require("../../config/errorCodes.json");
 
 /* POST find course. */
 router.post("/find", function (req, res, next) {
-  if (req.body.course_id && req.body.user_id) {
-    console.log(
-      chalk.yellow(
-        "find  | course id: " +
-          req.body.course_id +
-          " user id: " +
-          req.body.user_id
-      )
-    );
+  if (req.body.course_id) {
+    console.log(chalk.yellow("find  | course id: " + req.body.course_id));
     User.findUserById(req.body.user_id)
       .then((user) => {
         console.log(chalk.green("User found for private course"));
-        if (user.premium == true) {
-          Course.findPrivateCourse(req.body.course_id)
-            .then((course) => {
-              console.log(chalk.green("Course found."));
-              console.log(chalk.green("Course found."));
-              Instructor.findInstructor(course.instructorId).then(
-                (instructor) => {
-                  course.instructor = instructor;
-                  Comment.findCommentOne(course.commentId).then((comment) => {
-                    course.bestComment = comment;
-                    course.statistics.onlineStudents = Math.floor(
-                      Math.random() * (40 - 10) + 10
-                    );
-                    return res.status(202).json({
-                      status: 202,
-                      msg: "Course found.",
-                      course,
-                    });
+        Course.findCourse(req.body.course_id)
+          .then((course) => {
+            console.log(chalk.green("Course found."));
+            var isPremium = false;
+            user.premiumCourseGroups.map((premiumCourseGroup, index) => {
+              if (
+                premiumCourseGroup.courseGroup_id == course.group_id.toString()
+              ) {
+                isPremium = true;
+              }
+            });
+            if (!isPremium) {
+              course = Course.makeCoursePublic(course);
+            } else {
+              console.log(chalk.green("User is Premium"));
+            }
+            course.isPremium = isPremium;
+            Instructor.findInstructor(course.instructorId).then(
+              (instructor) => {
+                course.instructor = instructor;
+                Comment.findCommentOne(course.commentId).then((comment) => {
+                  course.bestComment = comment;
+                  course.statistics.onlineStudents = Math.floor(
+                    Math.random() * (40 - 10) + 10
+                  );
+                  return res.status(202).json({
+                    status: 202,
+                    msg: "Course found.",
+                    course,
                   });
-                }
-              );
-            })
-            .catch((error) => {
-              console.log(chalk.red(JSON.stringify(errorCodes.COURSE101)));
-              return res.status(400).json(errorCodes.COURSE101);
-            });
-        } else {
-          Course.findPublicCourse(req.body.course_id)
-            .then((course) => {
-              console.log(chalk.green("Course found."));
-              return res.status(202).json({
-                status: 202,
-                msg: "Course found.",
-                course: course,
-              });
-            })
-            .catch((error) => {
-              console.log(chalk.red(JSON.stringify(errorCodes.COURSE101)));
-              return res.status(400).json(errorCodes.COURSE101);
-            });
-        }
+                });
+              }
+            );
+          })
+          .catch((error) => {
+            console.log(chalk.red(JSON.stringify(errorCodes.COURSE101)));
+            return res.status(400).json(errorCodes.COURSE101);
+          });
       })
       .catch((error) => {
         console.log(chalk.red(JSON.stringify(successCodes.MAIL101)));

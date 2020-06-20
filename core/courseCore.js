@@ -64,7 +64,7 @@ CourseSchema.statics.findOneAtomicCourse = function (_id) {
 };
 
 //Find Course
-CourseSchema.statics.findPublicCourse = function (_id) {
+CourseSchema.statics.findCourse = function (_id) {
   return new Promise((resolve, reject) => {
     Course.findOne({ _id }).exec(function (err, course) {
       if (err) return reject(err);
@@ -75,33 +75,21 @@ CourseSchema.statics.findPublicCourse = function (_id) {
         };
         return reject(err);
       }
-      course.chapters.map((chapters) => {
-        chapters.sections.map((section) => {
-          if (!section.isPublic) {
-            section.video = "";
-          }
-        });
-      });
       return resolve(course);
     });
   });
 };
 
-//Find Private Course
-CourseSchema.statics.findPrivateCourse = function (_id) {
-  return new Promise((resolve, reject) => {
-    Course.findOne({ _id }).exec(function (err, course) {
-      if (err) return reject(err);
-      if (!course) {
-        err = {
-          code: 404,
-          errmsg: "not found",
-        };
-        return reject(err);
+//Find Course
+CourseSchema.statics.makeCoursePublic = function (course) {
+  course.chapters.map((chapters) => {
+    chapters.sections.map((section) => {
+      if (!section.isPublic) {
+        section.video = "";
       }
-      return resolve(course);
     });
   });
+  return course;
 };
 
 //Add Comment

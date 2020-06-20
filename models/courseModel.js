@@ -20,6 +20,7 @@ const CourseSchema = new Schema(
       parap1: String,
       parap2: String,
     },
+    bestComment: Object,
     instructor: Object,
     premium: Object,
     statistics: Object,
@@ -27,6 +28,10 @@ const CourseSchema = new Schema(
     purchaseNumber: Number,
     chapters: [],
     commentPoint: Number,
+    isPremium: {
+      type: Boolean,
+      default: false,
+    },
   },
   { timestamps: true }
 );

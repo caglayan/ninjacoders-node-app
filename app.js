@@ -32,7 +32,9 @@ db.once("open", function () {
 //-----------------------------------------------  Express App MiddleWares ---------------------------------------------
 app.use(cors());
 app.use(logger("tiny")); //tiny || dev
+app.use(bodyParser.urlencoded());
 app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
 
 app.use("/api", api);
 
