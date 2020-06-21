@@ -72,7 +72,7 @@ router.post("/signup", function (req, res, next) {
         console.log(chalk.green("User created."));
         mailService.sendMail(
           "welcome",
-          "Welcome to KirazAi",
+          "❤️NinjaCoders Ailesine Hoşgeldiniz!❤️",
           user,
           (error, info) => {
             if (error) {
@@ -110,7 +110,7 @@ router.post("/signupgoogle", function (req, res, next) {
         console.log(chalk.green("User created."));
         mailService.sendMail(
           "welcome",
-          "Welcome to KirazAi",
+          "❤️NinjaCoders Ailesine Hoşgeldiniz!❤️",
           user,
           (error, info) => {
             if (error) {
@@ -195,31 +195,26 @@ router.post("/resetpassword", function (req, res, next) {
     User.findUserByEmail(req.body.email)
       .then((user) => {
         console.log(chalk.green("User found for reset password."));
-        User.signUser(user)
-          .then((user) => {
-            console.log(chalk.green("User signed for reset password."));
-            mailService.sendMail(
-              "passwordReset",
-              "Reset Password",
-              user,
-              (error, info) => {
-                if (error) {
-                  console.log(chalk.red(JSON.stringify(successCodes.MAIL101)));
-                  return res.status(202).json(successCodes.MAIL101);
-                } else {
-                  console.log(chalk.red(JSON.stringify(successCodes.MAIL101)));
-                  return res.status(202).json(successCodes.MAIL101);
-                }
+        User.signUser(user).then((user) => {
+          console.log(chalk.green("User signed for reset password."));
+          mailService.sendMail(
+            "passwordReset",
+            "😟NinjaCoders: Şifrenizi mi unuttunuz?",
+            user,
+            (error, info) => {
+              if (error) {
+                console.log(chalk.red(JSON.stringify(successCodes.MAIL101)));
+                return res.status(202).json(successCodes.MAIL101);
+              } else {
+                console.log(chalk.red(JSON.stringify(successCodes.MAIL101)));
+                return res.status(202).json(successCodes.MAIL101);
               }
-            );
-          })
-          .catch((error) => {
-            console.log(chalk.red(JSON.stringify(successCodes.MAIL101)));
-            return res.status(202).json(successCodes.MAIL101);
-          });
+            }
+          );
+        });
       })
       .catch((error) => {
-        console.log(chalk.red(JSON.stringify(successCodes.MAIL101)));
+        console.log(chalk.red(JSON.stringify(errorCodes.USER101)));
         return res.status(202).json(successCodes.MAIL101);
       });
   } else {

@@ -1,5 +1,4 @@
 const express = require("express");
-const dbConfig = require("./config/db.json");
 const mongoose = require("mongoose");
 const chalk = require("chalk"); // For logging colorfull
 require("console-stamp")(console, { pattern: "dd/mm/yyyy HH:MM:ss.l" }); // For time logs in console
@@ -7,13 +6,14 @@ const cors = require("cors"); // Cors
 const logger = require("morgan"); // HTTP request logger middleware
 const bodyParser = require("body-parser"); // Parse incoming request bodies in a middleware before handlers
 const api = require("./routes/api.js");
+require("dotenv").config();
 
 // setup exprees js
 var app = express();
 
 //--------------------------------------------------- Database Coonection ----------------------------------------------
 //connect to MongoDB
-mongoose.connect(process.env.MONGODB_URI || dbConfig.url, {
+mongoose.connect(process.env.MONGODB_URI, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
   useCreateIndex: true,

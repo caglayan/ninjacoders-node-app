@@ -8,7 +8,6 @@ const errorCodes = require("../../config/errorCodes.json");
 /* POST find course. */
 router.post("/find", function (req, res, next) {
   if (req.body.course_id) {
-    console.log("deneme");
     console.log(chalk.yellow("find public | course id: " + req.body.course_id));
     Course.findCourse(req.body.course_id)
       .then((course) => {
@@ -21,7 +20,6 @@ router.post("/find", function (req, res, next) {
             course.statistics.onlineStudents = Math.floor(
               Math.random() * (40 - 10) + 10
             );
-            console.log(course);
             return res.status(202).json({
               status: 202,
               msg: "Course found.",

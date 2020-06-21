@@ -3,13 +3,13 @@
         "Code": "MAIL101",
         "Status": "202",
         "Success": "Password recovery emeail is sent.",
-        "Message": "Password recovery emeail is sent."
+        "Message": "Şifre yenileme maili gönderildi."
     },
     "USER101": {
         "Code": "MAIL101",
         "Status": "202",
         "Success": "User is updated.",
-        "Message": "Your profile is updated."
+        "Message": "Profiliniz güncellendi."
     }
 
 }

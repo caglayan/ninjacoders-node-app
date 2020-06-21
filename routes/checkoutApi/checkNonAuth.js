@@ -7,11 +7,14 @@ const errorCodes = require("../../config/errorCodes.json");
 var Iyzipay = require("iyzipay");
 const User = require("../../core/userCore");
 const CourseGroupCore = require("../../core/courseGroupCore");
+const mailService = require("../../services/mailService");
 
 var iyzipay = new Iyzipay({
-  apiKey: "sandbox-4rDk6qMPf77F2RJxpBgOf7vQG47C6KHQ",
-  secretKey: "sandbox-p19OiUuwV1068yzweYrcw6an1f8f5pIF",
-  uri: "https://sandbox-api.iyzipay.com",
+  apiKey:
+    process.env.IYZIPAY_APIKEY || "sandbox-4rDk6qMPf77F2RJxpBgOf7vQG47C6KHQ",
+  secretKey:
+    process.env.IYZIPAY_SECRETKEY || "sandbox-p19OiUuwV1068yzweYrcw6an1f8f5pIF",
+  uri: process.env.IYZIPAY_URI || "https://sandbox-api.iyzipay.com",
 });
 
 /* POST find course. */
@@ -27,7 +30,8 @@ router.post("/payment-callback", function (req, res, next) {
       //console.log(err);
       if (result.status === "failure") {
         return res.redirect(
-          "http://localhost:3000/user/checkout?courseGroup=" +
+          process.env.WEB_URI +
+            "/user/checkout?courseGroup=" +
             result.itemTransactions[0].itemId +
             "&error=" +
             result.errorCode +
@@ -57,7 +61,8 @@ router.post("/payment-callback", function (req, res, next) {
                 user.save().then((user) => {
                   if (!user) {
                     return res.redirect(
-                      "http://localhost:3000/user/checkout?courseGroup=" +
+                      process.env.WEB_URI +
+                        "/user/checkout?courseGroup=" +
                         result.itemTransactions[0].itemId +
                         "&error=" +
                         "NinjaCoders Error" +
@@ -66,8 +71,23 @@ router.post("/payment-callback", function (req, res, next) {
                     );
                   }
                   console.log(chalk.green("Successfull Payment"));
+                  mailService.sendMail(
+                    "premium",
+                    "🔥Tebrikler! NinjaCoders'tan sertifikalı bir ders satın aldınız.",
+                    user,
+                    (error, info) => {
+                      if (error) {
+                        error = errorCodes.MAIL101;
+                        console.log(chalk.red(JSON.stringify(error)));
+                      } else {
+                        //error = errorCodes.MAIL101;
+                        //console.log(chalk.red(JSON.stringify(error)));
+                      }
+                    }
+                  );
                   return res.redirect(
-                    "http://localhost:3000/user/success?courseGroup=" +
+                    process.env.WEB_URI +
+                      "/user/success?courseGroup=" +
                       result.itemTransactions[0].itemId
                   );
                 });
@@ -77,7 +97,8 @@ router.post("/payment-callback", function (req, res, next) {
           .catch((err) => {
             console.log(chalk.green(err));
             return res.redirect(
-              "http://localhost:3000/user/checkout?courseGroup=" +
+              process.env.WEB_URI +
+                "/user/success?courseGroup=" +
                 result.itemTransactions[0].itemId +
                 "&error=" +
                 "NinjaCoders Error" +
@@ -91,7 +112,7 @@ router.post("/payment-callback", function (req, res, next) {
 });
 
 router.get("/payment-callback", function (req, res, next) {
-  return res.redirect("http://localhost:3000/user/checkout/deneme");
+  return res.redirect(process.env.WEB_URI + "/user/checkout/deneme");
 });
 
 module.exports = router;

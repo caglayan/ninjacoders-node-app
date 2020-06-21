@@ -16,16 +16,12 @@ const CourseGroupCore = require("../../core/courseGroupCore");
 
 // https://api.iyzipay.com/payment/iyzipos/checkoutform/callback3ds/failure/86
 
-// var iyzipay = new Iyzipay({
-//   apiKey: "Mx4Gq1BCDTa81YwuiYLo0xnYmay73gGK",
-//   secretKey: "288ZzZNcCa2SCl8OUVmH8iirFtK3CBtj",
-//   uri: "https://api.iyzipay.com",
-// });
-
 var iyzipay = new Iyzipay({
-  apiKey: "sandbox-4rDk6qMPf77F2RJxpBgOf7vQG47C6KHQ",
-  secretKey: "sandbox-p19OiUuwV1068yzweYrcw6an1f8f5pIF",
-  uri: "https://sandbox-api.iyzipay.com",
+  apiKey:
+    process.env.IYZIPAY_APIKEY || "sandbox-4rDk6qMPf77F2RJxpBgOf7vQG47C6KHQ",
+  secretKey:
+    process.env.IYZIPAY_SECRETKEY || "sandbox-p19OiUuwV1068yzweYrcw6an1f8f5pIF",
+  uri: process.env.IYZIPAY_URI || "https://sandbox-api.iyzipay.com",
 });
 
 router.post("/payment", function (req, res, next) {
@@ -67,7 +63,8 @@ const payWithCode = (res, courseGroup, codeName, user) => {
         basketId: "NINJABASKET",
         paymentGroup: Iyzipay.PAYMENT_GROUP.PRODUCT,
         callbackUrl:
-          "http://localhost:4000/api/checkout/unauth/payment-callback?user_id=" +
+          process.env.SERVER_URI +
+          "/api/checkout/unauth/payment-callback?user_id=" +
           user._id.toString(),
         enabledInstallments: [1],
         buyer: {
@@ -138,7 +135,8 @@ const payWithoutCode = (res, courseGroup, user) => {
     basketId: "NINJABASKET",
     paymentGroup: Iyzipay.PAYMENT_GROUP.PRODUCT,
     callbackUrl:
-      "http://localhost:4000/api/checkout/unauth/payment-callback?user_id=" +
+      process.env.SERVER_URI +
+      "/api/checkout/unauth/payment-callback?user_id=" +
       user._id.toString(),
     enabledInstallments: [1],
     buyer: {

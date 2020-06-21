@@ -5,12 +5,12 @@ var hbs = require("nodemailer-express-handlebars");
 // TEST EMAIL
 function sendMailTest(recipient, callback) {
   const transporter = nodeMailer.createTransport({
-    host: "mail.ninjacoders.co",
+    host: process.env.MAIL_HOST,
     secureConnection: true,
     port: 465,
     auth: {
-      user: "merhaba@ninjacoders.co",
-      pass: "Merhaba123Ninja",
+      user: process.env.MAIL_USER,
+      pass: process.env.MAIL_PASS,
     },
     tls: {
       rejectUnauthorized: false,
@@ -62,12 +62,12 @@ function sendMailTest(recipient, callback) {
 // SEND RESET PASSWORD EMAIL
 function sendMail(mailTemplate, mailSubject, user, callback) {
   const transporter = nodeMailer.createTransport({
-    host: "mail.ninjacoders.co",
+    host: process.env.MAIL_HOST,
     secureConnection: true,
     port: 465,
     auth: {
-      user: "merhaba@ninjacoders.co",
-      pass: "Merhaba123Ninja",
+      user: process.env.MAIL_USER,
+      pass: process.env.MAIL_PASS,
     },
     tls: {
       rejectUnauthorized: false,
@@ -126,12 +126,12 @@ function sendNinjaTeamMail(
   callback
 ) {
   const transporter = nodeMailer.createTransport({
-    host: "mail.ninjacoders.co",
+    host: process.env.MAIL_HOST,
     secureConnection: true,
     port: 465,
     auth: {
-      user: "merhaba@ninjacoders.co",
-      pass: "Merhaba123Ninja",
+      user: process.env.MAIL_USER,
+      pass: process.env.MAIL_PASS,
     },
     tls: {
       rejectUnauthorized: false,

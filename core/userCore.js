@@ -1,7 +1,6 @@
 const mongoose = require("mongoose");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
-const tokenConfig = require("../config/token.json");
 const errorCodes = require("../config/errorCodes.json");
 const chalk = require("chalk");
 var UserSchema = require("../models/userModel.js");
@@ -19,7 +18,7 @@ UserSchema.statics.createUser = function (userData) {
               _id: user._id.toHexString(),
               access: "auth",
             },
-            tokenConfig.secret,
+            process.env.JWT_TOKEN_SECRET,
             {
               expiresIn: 86400,
             }
@@ -102,7 +101,7 @@ UserSchema.statics.createUserGoogle = function (googleIdToken) {
                   _id: user._id.toHexString(),
                   access: "auth",
                 },
-                tokenConfig.secret,
+                process.env.JWT_TOKEN_SECRET,
                 {
                   expiresIn: 86400,
                 }
@@ -175,7 +174,7 @@ UserSchema.statics.authenticateUser = function (userData) {
                 _id: user._id.toHexString(),
                 access: "auth",
               },
-              tokenConfig.secret,
+              process.env.JWT_TOKEN_SECRET,
               {
                 expiresIn: 86400,
               }
@@ -247,7 +246,7 @@ UserSchema.statics.authenticateUserGoogleId = function (googleIdToken) {
                 _id: user._id.toHexString(),
                 access: "auth",
               },
-              tokenConfig.secret,
+              process.env.JWT_TOKEN_SECRET,
               {
                 expiresIn: 86400,
               }
@@ -274,7 +273,7 @@ UserSchema.statics.authenticateUserGoogleId = function (googleIdToken) {
 // check user and find user with token
 UserSchema.statics.findByToken = function (token) {
   return new Promise((resolve, reject) => {
-    jwt.verify(token, tokenConfig.secret, function (err, decoded) {
+    jwt.verify(token, process.env.JWT_TOKEN_SECRET, function (err, decoded) {
       if (err) {
         console.log(chalk.red(JSON.stringify(err)));
         return reject(errorCodes.SECURITY102);
@@ -414,7 +413,7 @@ UserSchema.statics.signUser = function (user) {
           _id: user._id.toHexString(),
           access: "auth",
         },
-        tokenConfig.secret,
+        process.env.JWT_TOKEN_SECRET,
         {
           expiresIn: 86400,
         }
@@ -440,7 +439,7 @@ UserSchema.statics.wathVideo = function (video_id, course) {
           _id: user._id.toHexString(),
           access: "auth",
         },
-        tokenConfig.secret,
+        process.env.JWT_TOKEN_SECRET,
         {
           expiresIn: 86400,
         }
@@ -470,7 +469,7 @@ UserSchema.statics.generateAuthToken = function(userData) {
         _id: user._id.toHexString(),
         access: "auth"
       },
-      tokenConfig.secret,
+      process.env.JWT_TOKEN_SECRET,
       {
         expiresIn: 86400
       }
