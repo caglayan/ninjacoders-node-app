@@ -7,7 +7,7 @@ const Course = require("../../core/courseCore");
 const errorCodes = require("../../config/errorCodes.json");
 const successCodes = require("../../config/successCodes.json");
 const Iyzipay = require("iyzipay");
-const AppCodeCore = require("../../core/appCodeCore");
+//const AppCodeCore = require("../../core/appCodeCore");
 const CourseGroupCore = require("../../core/courseGroupCore");
 
 /// PAYMENT ///
