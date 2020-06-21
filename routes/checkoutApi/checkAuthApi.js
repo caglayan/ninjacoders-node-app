@@ -16,18 +16,11 @@ const CourseGroupCore = require("../../core/courseGroupCore");
 
 // https://api.iyzipay.com/payment/iyzipos/checkoutform/callback3ds/failure/86
 
-var iyzipay = new Iyzipay({
-  apiKey:
-    process.env.IYZIPAY_APIKEY || "sandbox-4rDk6qMPf77F2RJxpBgOf7vQG47C6KHQ",
-  secretKey:
-    process.env.IYZIPAY_SECRETKEY || "sandbox-p19OiUuwV1068yzweYrcw6an1f8f5pIF",
-  uri: process.env.IYZIPAY_URI || "https://sandbox-api.iyzipay.com",
-});
-
 router.post("/payment", function (req, res, next) {
-  console.log(req.body);
   if (req.body.group_id) {
-    console.log(chalk.yellow("find public | group id: " + req.body.group_id));
+    console.log(
+      chalk.yellow("Payment started  | group id: " + req.body.group_id)
+    );
     CourseGroupCore.findCourseGroup(req.body.group_id)
       .then((courseGroup) => {
         console.log(chalk.green("Course Group found."));
@@ -47,6 +40,11 @@ router.post("/payment", function (req, res, next) {
 });
 
 const payWithCode = (res, courseGroup, codeName, user) => {
+  var iyzipay = new Iyzipay({
+    apiKey: process.env.IYZIPAY_APIKEY,
+    secretKey: process.env.IYZIPAY_SECRETKEY,
+    uri: process.env.IYZIPAY_URI,
+  });
   AppCodeCore.findCode(codeName, courseGroup._id, "sale")
     .then((code) => {
       console.log(chalk.green("Code found."));
@@ -117,6 +115,11 @@ const payWithCode = (res, courseGroup, codeName, user) => {
 };
 
 const payWithoutCode = (res, courseGroup, user) => {
+  var iyzipay = new Iyzipay({
+    apiKey: process.env.IYZIPAY_APIKEY,
+    secretKey: process.env.IYZIPAY_SECRETKEY,
+    uri: process.env.IYZIPAY_URI,
+  });
   var paidPrice;
   console.log(courseGroup.price);
   if (courseGroup.price.isSale) {

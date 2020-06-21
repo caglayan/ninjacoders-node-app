@@ -35,7 +35,7 @@ router.use(function (req, res, next) {
     .catch((error) => {
       error = errorCodes.SECURITY102;
       console.log(chalk.red(JSON.stringify(error)));
-      return res.status(400).json(error);
+      return res.redirect(process.env.WEB_URI + "/logout");
     });
 });
 
