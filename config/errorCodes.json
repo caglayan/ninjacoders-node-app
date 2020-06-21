@@ -58,6 +58,16 @@
         "Status": "400",
         "Message": "Google token expired or malformed."
     },
+    "SECURITY104": {
+        "Code": "SECURITY104",
+        "Status": "400",
+        "Message": "Güvenliğiniz için tekrar giriş yapmanız gerekmektedir."
+    },
+    "SECURITY105": {
+        "Code": "SECURITY105",
+        "Status": "400",
+        "Message": "Bu güvenlik anahtarı ile kimse bulunamadı."
+    },
     "COURSE101": {
         "Code": "COURSE101",
         "Status": "400",
