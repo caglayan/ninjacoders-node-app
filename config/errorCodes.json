@@ -3,153 +3,163 @@
         "Code": "SERVER101",
         "Status": "400",
         "Error": "Requst is not acceptable.",
-        "Message": "An internal error is occured."
+        "Message": "İstek ile ilgili bir hata oluştu"
     },
     "USER100": {
         "Code": "USER101",
         "Status": "400",
         "Error": "User Update Problem ",
-        "Message": "An internal error is occured."
+        "Message": "Kullanıcı güncellenemedi."
     },
     "USER101": {
         "Code": "USER101",
         "Status": "400",
         "Error": "User Not Found",
-        "Message": "Incorrect email or password"
+        "Message": "Hatalı bir email veya şifre girdiniz."
     },
     "USER102": {
         "Code": "USER102",
         "Status": "400",
-        "Message": "Incorrect email or password."
+        "Error": "Incorrect email or password.",
+        "Message": "Hatalı bir email veya şifre girdiniz."
     },
     "USER103": {
         "Code": "USER103",
         "Status": "500",
         "Error": "Internal Database Error for USER",
-        "Message": "An internal error is occured."
+        "Message": "Kullanıcı ile ilgili bir hata oluştu."
     },
     "USER104": {
         "Code": "USER104",
         "Status": "400",
-        "Message": "An account with this email exists. Sign in."
+        "Error": "Email exists.",
+        "Message": "Bu email'i kullanan bir kullanıcı var. Lütfen giriş yapın."
     },
     "USER105": {
         "Code": "USER105",
         "Status": "400",
-        "Message": "User image is not found."
+        "Error": "No profile image",
+        "Message": "Profil resmi bulunamadı."
     },
     "MAIL101": {
         "Code": "MAIL101",
         "Status": "400",
-        "Message": "Mail sending is not succesfull."
+        "Error": "Mail send failure",
+        "Message": "Mail gönderimi başarısız"
     },
     "SECURITY101": {
         "Code": "SECURITY101",
         "Status": "400",
-        "Message": "There is no token."
+        "Error": "There is no token.",
+        "Message": "Güvenlik anahtarı yok."
     },
     "SECURITY102": {
         "Code": "SECURITY102",
         "Status": "400",
-        "Message": "Your security key expired or malformed. Please sign in again."
+        "Error": "Your security key expired or malformed. Please sign in again.",
+        "Message": "Güvenlik anahtarınız ile ilgili bir sorun var. Lütfen tekrar giriş yapın."
     },
     "SECURITY103": {
         "Code": "SECURITY103",
         "Status": "400",
-        "Message": "Google token expired or malformed."
+        "Error": "Google token expired or malformed.",
+        "Message": "Google güvenlik anahtarı ile ilgili bir sorun var."
     },
     "SECURITY104": {
         "Code": "SECURITY104",
         "Status": "400",
-        "Message": "Güvenliğiniz için tekrar giriş yapmanız gerekmektedir."
+        "Error": "Token problem.",
+        "Message": "Güvenlik anahtarınız ile ilgili bir sorun var. Lütfen tekrar giriş yapın."
     },
     "SECURITY105": {
         "Code": "SECURITY105",
         "Status": "400",
-        "Message": "Bu güvenlik anahtarı ile kimse bulunamadı."
+        "Error": "No user with this token",
+        "Message": "Güvenlik anahtarınız ile ilgili bir sorun var. Lütfen tekrar giriş yapın."
     },
     "COURSE101": {
         "Code": "COURSE101",
         "Status": "400",
-        "Message": "Course not found."
+        "Error": "Course not found.",
+        "Message": "Kurs bulunamadı."
     },
     "COMMENT101": {
         "Code": "COMMENT101",
         "Status": "400",
-        "Error": "Comment Update: Comment is not Found",
-        "Message": "An internal error is occured."
+        "Error": "Comment is not Found",
+        "Message": "Yorum ile ilgili bir problem var."
     },
     "COMMENT102": {
         "Code": "COMMENT102",
         "Status": "500",
         "Error": "Comment Create: Not created",
-        "Message": "An internal error is occured."
+        "Message": "Yorum ile ilgili bir problem var."
     },
     "COMMENT103": {
         "Code": "COMMENT103",
         "Status": "500",
         "Error": "Internal Database Error for COMMENT",
-        "Message": "An internal error is occured."
+        "Message": "Yorum ile ilgili bir problem var."
     },
     "COMMENT104": {
         "Code": "COMMENT104",
         "Status": "400",
         "Error": "Comment exists",
-        "Message": "You have already created a comment"
+        "Message": "Yorum ile ilgili bir problem var."
     },
     "COMMENT105": {
         "Code": "COMMENT105",
         "Status": "400",
         "Error": "Comment not found",
-        "Message": "Yorum bulunamadı."
+        "Message": "Yorum ile ilgili bir problem var."
     },
     "QUESTION101": {
         "Code": "QUESTION101",
         "Status": "400",
         "Error": "Question: Question is not Found",
-        "Message": "An internal error is occured."
+        "Message": "Soru ile ilgili bir problem var."
     },
     "QUESTION102": {
         "Code": "QUESTION102",
         "Status": "500",
         "Error": "Answer or Question Create: Not created",
-        "Message": "An internal error is occured."
+        "Message": "Soru ile ilgili bir problem var."
     },
     "QUESTION103": {
         "Code": "QUESTION103",
         "Status": "500",
         "Error": "Question Update: not updated",
-        "Message": "An internal error is occured."
+        "Message": "Soru ile ilgili bir problem var."
     },
     "QUESTION104": {
         "Code": "QUESTION103",
         "Status": "500",
         "Error": "Question Update: no permission",
-        "Message": "An internal error is occured."
+        "Message": "Soru ile ilgili bir problem var."
     },
     "ANSWER101": {
         "Code": "ANSWER101",
         "Status": "500",
         "Error": "Answer not found",
-        "Message": "An internal error is occured."
+        "Message": "Cevap ile ilgili bir problem var."
     },
     "APP101": {
         "Code": "APP101",
         "Status": "500",
         "Error": "App not found",
-        "Message": "An internal error is occured."
+        "Message": "Uygulama ile ilgili bir problem var."
     },
     "CGROUP101": {
         "Code": "CGROUP101",
         "Status": "500",
         "Error": "Course Group not found",
-        "Message": "An internal error is occured."
+        "Message": "Kurs grubu ile ilgili bir problem var."
     },
     "APPCODE101": {
         "Code": "APPCODE101",
         "Status": "500",
         "Error": "App code not found",
-        "Message": "An internal error is occured."
+        "Message": "İndirim kodu ile ilgili bir problem var."
     }
 
 }
