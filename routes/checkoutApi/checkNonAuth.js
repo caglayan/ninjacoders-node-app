@@ -41,8 +41,8 @@ router.post("/payment-callback", function (req, res, next) {
           );
         } else {
           if (result.paymentStatus == "FAILURE") {
-            console.log("groupId", groupId);
-            console.log("/user/checkout?courseGroup=" + groupId + "&error=");
+            //console.log("groupId", groupId);
+            //console.log("userId", userId);
 
             return res.redirect(
               process.env.WEB_URI +
