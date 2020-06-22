@@ -27,11 +27,9 @@ router.post("/payment-callback", function (req, res, next) {
         token: req.body.token,
       },
       function (err, result) {
-        //console.log(result);
+        console.log(result);
         //console.log(err);
-
         if (result.status === "failure") {
-          console.log(result);
           return res.redirect(
             process.env.WEB_URI +
               "/user/checkout?courseGroup=" +
@@ -42,7 +40,6 @@ router.post("/payment-callback", function (req, res, next) {
               result.errorMessage
           );
         } else {
-          console.log(result);
           if (result.paymentStatus == "FAILURE") {
             return res.redirect(
               process.env.WEB_URI +
