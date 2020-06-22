@@ -42,12 +42,12 @@ router.post("/payment-callback", function (req, res, next) {
         } else {
           if (result.paymentStatus == "FAILURE") {
             console.log("groupId", groupId);
-            console.log("/user/checkout?courseGroup=" + +groupId + "&error=");
+            console.log("/user/checkout?courseGroup=" + groupId + "&error=");
 
             return res.redirect(
               process.env.WEB_URI +
                 "/user/checkout?courseGroup=" +
-                +groupId +
+                groupId +
                 "&error=" +
                 "NinjaCoders Error" +
                 ": " +
@@ -114,7 +114,7 @@ router.post("/payment-callback", function (req, res, next) {
               return res.redirect(
                 process.env.WEB_URI +
                   "/user/checkout?courseGroup=" +
-                  +groupId +
+                  groupId +
                   "&error=" +
                   "NinjaCoders Error" +
                   ": " +
