@@ -42,6 +42,7 @@ router.post("/payment-callback", function (req, res, next) {
               result.errorMessage
           );
         } else {
+          console.log(result);
           User.findUserById(result.conversationId)
             .then((user) => {
               console.log(chalk.green("User found"));
@@ -101,12 +102,12 @@ router.post("/payment-callback", function (req, res, next) {
               console.log(chalk.green(err));
               return res.redirect(
                 process.env.WEB_URI +
-                  "/user/success?courseGroup=" +
-                  groupId +
+                  "/user/checkout?courseGroup=" +
+                  +groupId +
                   "&error=" +
                   "NinjaCoders Error" +
                   ": " +
-                  "NinjaCoders tarafında bir hata oluştu."
+                  "Ödemeniz ile ilgili bir hata meydana geldi"
               );
             });
         }
