@@ -43,6 +43,17 @@ router.post("/payment-callback", function (req, res, next) {
           );
         } else {
           console.log(result);
+          if (result.paymentStatus == "FAILURE") {
+            return res.redirect(
+              process.env.WEB_URI +
+                "/user/checkout?courseGroup=" +
+                +groupId +
+                "&error=" +
+                "NinjaCoders Error" +
+                ": " +
+                "Ödemeniz ile ilgili bir hata meydana geldi"
+            );
+          }
           User.findUserById(result.conversationId)
             .then((user) => {
               console.log(chalk.green("User found"));
