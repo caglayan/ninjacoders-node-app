@@ -18,20 +18,24 @@ router.post("/payment-callback", function (req, res, next) {
       uri: process.env.IYZIPAY_URI,
     });
 
+    const userId = req.query.user_id;
+    const groupId = req.query.group_id;
     iyzipay.checkoutForm.retrieve(
       {
         locale: Iyzipay.LOCALE.TR,
-        conversationId: req.query.user_id,
+        conversationId: userId,
         token: req.body.token,
       },
       function (err, result) {
         //console.log(result);
         //console.log(err);
+
         if (result.status === "failure") {
+          console.log(result);
           return res.redirect(
             process.env.WEB_URI +
               "/user/checkout?courseGroup=" +
-              result.itemTransactions[0].itemId +
+              groupId +
               "&error=" +
               result.errorCode +
               ": " +
@@ -51,8 +55,8 @@ router.post("/payment-callback", function (req, res, next) {
                 result.itemTransactions[0].itemId
               ).then((courseGroup) => {
                 console.log(chalk.green("Course Group found."));
-                courseGroup.students.push(user._id);
-                console.log(courseGroup);
+                if (!courseGroup.students.includes(user._id))
+                  courseGroup.students.push(user._id);
                 courseGroup.save().then(() => {
                   console.log(chalk.green("Course Group updated."));
 
@@ -62,7 +66,7 @@ router.post("/payment-callback", function (req, res, next) {
                       return res.redirect(
                         process.env.WEB_URI +
                           "/user/checkout?courseGroup=" +
-                          result.itemTransactions[0].itemId +
+                          groupId +
                           "&error=" +
                           "NinjaCoders Error" +
                           ": " +
@@ -98,7 +102,7 @@ router.post("/payment-callback", function (req, res, next) {
               return res.redirect(
                 process.env.WEB_URI +
                   "/user/success?courseGroup=" +
-                  result.itemTransactions[0].itemId +
+                  groupId +
                   "&error=" +
                   "NinjaCoders Error" +
                   ": " +

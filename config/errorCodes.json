@@ -41,6 +41,24 @@
         "Error": "No profile image",
         "Message": "Profil resmi bulunamadı."
     },
+    "USER106": {
+        "Code": "USER106",
+        "Status": "400",
+        "Error": "User Not Found",
+        "Message": "Kullanıcı bulunamadı"
+    },
+    "USER107": {
+        "Code": "USER107",
+        "Status": "400",
+        "Error": "Free Course Error",
+        "Message": "Ücretsiz ders grubu kaydı hatası oluştu."
+    },
+    "USER108": {
+        "Code": "USER108",
+        "Status": "400",
+        "Error": "User already registered",
+        "Message": "Bu ders grubuna daha önce kayıt olmuşsunuz."
+    },
     "MAIL101": {
         "Code": "MAIL101",
         "Status": "400",

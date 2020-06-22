@@ -7,6 +7,7 @@ const CourseGroupSchmea = new Schema(
     CM: Object,
     courses: [Object],
     students: [String],
+    price: Object,
   },
   { timestamps: true }
 );
